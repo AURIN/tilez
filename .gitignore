@@ -1,0 +1,11 @@
+/.settings/com.eclipsesource.jshint.ui.prefs
+/.project
+/.idea
+/compile.sh
+/t-integration.sh
+/t-unit.sh
+/vtbuild.sh
+/node_modules
+/target
+/run.sh
+/install-views.sh

@@ -1,0 +1,52 @@
+{
+  "name": "vector-tile-server",
+  "version": "0.3.4-SNAPSHOT",
+  "description": "Generation and serving of vector tiles",
+  "private": true,
+  "keywords": [ "aurin", "vector", "tile" ],
+  "author": {
+    "name": "Luca Morandini",
+    "email": "luca.morandini@unimelb.edu.au"
+  },
+  "contributors": [],
+  "licenses" : [{
+    "type": "Apache",
+    "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+  }],
+  "main": "./app.js",
+  "dependencies": {
+    "nodejs-commons": "git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.4.5-SNAPSHOT",
+    "express": "2.5.x",
+    "util": "0.4.9",
+    "swagger-node-express": "git+ssh://git@github.com:AURIN/swagger-node-express.git#aurin",
+    "futures": "2.3.1",
+    "sequence": "2.2.1",
+    "forEachAsync": "2.2.0",
+    "util": "0.4.9",
+    "sax": "0.5.1",
+    "pg": "2.2.0",
+    "nano": "git+ssh://git@github.com:AURIN/nano.git#aurin",
+    "mocha": "git+ssh://git@github.com:AURIN/mocha.git",
+    "chai": "1.5.0",
+    "xunit-file": "0.0.5",
+    "istanbul": "0.1.37",
+    "mocha-istanbul": "0.2.0",
+    "topojson" : "1.6.0"
+  },
+  "devDependencies": {
+    "nano-mock": "git+ssh://git@github.com:AURIN/nano-mock.git#v0.1.1",
+    "pg-mock": "git+ssh://git@github.com:AURIN/pg-mock.git#v0.2.4",
+    "sandboxed-module": "0.2.0"
+  },
+  "scripts": {},
+  "engines": {
+    "node": "v0.10.x"
+  },
+  "_id": "au.org.aurin.vector-tile-server@0.3.4-SNAPSHOT",
+  "optionalDependencies": {},
+  "_engineSupported": true,
+  "_npmVersion": ">=1.2.x",
+  "_nodeVersion": "v0.10.x",
+  "_defaultsLoaded": false,
+  "_from": ""
+}

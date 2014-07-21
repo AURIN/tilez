@@ -1,0 +1,228 @@
+{
+  "layers" : {
+    "street" : {
+      "general" : {
+        "proj" : "EPSG:4283",
+        "displayProj" : "EPSG:3857",
+        "geomcol" : "wkb_geometry",
+        "schema" : "psma",
+        "pk" : "st_lne_pid",
+        "retColumns" : "st_lne_pid as feature_code, name as feature_name"
+      },
+      "queries" : {
+        "0-14" : {
+          "table" : "vic_street_line_joined_shp",
+          "addExpr" : "false = true"
+        },
+        "15-20" : {
+          "table" : "vic_street_line_joined_shp",
+          "addExpr" : null
+        }
+      }
+    },
+    "country" : {
+      "general" : {
+        "proj" : "EPSG:4283",
+        "displayProj" : "EPSG:3857",
+        "geomcol" : "wkb_geometry",
+        "schema" : "abs_asgc",
+        "pk" : "country_code",
+        "retColumns" : "country_code as feature_code, country_name as feature_name"
+      },
+      "queries" : {
+        "0-5" : {
+          "table" : "country06gen0_1",
+          "addExpr" : ""
+        },
+        "6-6" : {
+          "table" : "country06gen0_05",
+          "addExpr" : ""
+        },
+        "7-8" : {
+          "table" : "country06gen0_01",
+          "addExpr" : ""
+        },
+        "9-10" : {
+          "table" : "country06gen0_005",
+          "addExpr" : ""
+        },
+        "11-12" : {
+          "table" : "country06gen0_001",
+          "addExpr" : ""
+        },
+        "13-18" : {
+          "table" : "country06",
+          "addExpr" : ""
+        }
+      }
+    },
+    "ste" : {
+      "general" : {
+        "proj" : "EPSG:4283",
+        "displayProj" : "EPSG:3857",
+        "geomcol" : "wkb_geometry",
+        "schema" : "abs_asgc",
+        "pk" : "state_code",
+        "retColumns" : "state_code as feature_code, state_name as feature_name"
+      },
+      "queries" : {
+        "0-5" : {
+          "table" : "ste06aaustgen0_1",
+          "addExpr" : ""
+        },
+        "6-6" : {
+          "table" : "ste06aaustgen0_05",
+          "addExpr" : ""
+        },
+        "7-8" : {
+          "table" : "ste06aaustgen0_01",
+          "addExpr" : ""
+        },
+        "9-10" : {
+          "table" : "ste06aaustgen0_005",
+          "addExpr" : ""
+        },
+        "11-12" : {
+          "table" : "ste06aaustgen0_001",
+          "addExpr" : ""
+        },
+        "13-18" : {
+          "table" : "ste06aaust",
+          "addExpr" : ""
+        }
+      }
+    },
+    "lga" : {
+      "general" : {
+        "proj" : "EPSG:4283",
+        "displayProj" : "EPSG:3857",
+        "geomcol" : "wkb_geometry",
+        "schema" : "abs_asgc",
+        "pk" : "lga_code06",
+        "retColumns" : "lga_code06 as feature_code, lga_name06 as feature_name"
+      },
+      "queries" : {
+        "0-6" : {
+          "table" : "lga06gen0_05",
+          "addExpr" : ""
+        },
+        "7-8" : {
+          "table" : "lga06gen0_01",
+          "addExpr" : ""
+        },
+        "9-10" : {
+          "table" : "lga06gen0_005",
+          "addExpr" : ""
+        },
+        "11-12" : {
+          "table" : "lga06gen0_001",
+          "addExpr" : ""
+        },
+        "13-18" : {
+          "table" : "lga06aaust",
+          "addExpr" : ""
+        }
+      }
+    },
+    "ced2010" : {
+      "general" : {
+        "proj" : "EPSG:4283",
+        "displayProj" : "EPSG:3857",
+        "geomcol" : "wkb_geometry",
+        "schema" : "aec",
+        "pk" : "ced_2010",
+        "retColumns" : "ced_2010 as feature_code, ced_2010 as feature_name"
+      },
+      "queries" : {
+        "0-6" : {
+          "table" : "ced10gen0_05",
+          "addExpr" : ""
+        },
+        "7-8" : {
+          "table" : "ced10gen0_01",
+          "addExpr" : ""
+        },
+        "9-10" : {
+          "table" : "ced10gen0_005",
+          "addExpr" : ""
+        },
+        "11-12" : {
+          "table" : "ced10gen0_001",
+          "addExpr" : ""
+        },
+        "13-18" : {
+          "table" : "ced10aaust_region",
+          "addExpr" : ""
+        }
+      }
+    },
+    "pbc2010" : {
+      "general" : {
+        "proj" : "EPSG:4283",
+        "displayProj" : "EPSG:3857",
+        "geomcol" : "wkb_geometry",
+        "schema" : "aec",
+        "pk" : "poll_id",
+        "retColumns" : "poll_id as feature_code, poll_id as feature_name"
+      },
+      "queries" : {
+        "0-6" : {
+          "table" : "pbc10gen0_05",
+          "addExpr" : ""
+        },
+        "7-8" : {
+          "table" : "pbc10gen0_01",
+          "addExpr" : ""
+        },
+        "9-10" : {
+          "table" : "pbc10gen0_005",
+          "addExpr" : ""
+        },
+        "11-12" : {
+          "table" : "pbc10gen0_001",
+          "addExpr" : ""
+        },
+        "13-18" : {
+          "table" : "pbc10aaust",
+          "addExpr" : ""
+        }
+      }
+    },
+    "cd2006" : {
+      "general" : {
+        "proj" : "EPSG:4283",
+        "displayProj" : "EPSG:3857",
+        "geomcol" : "wkb_geometry",
+        "schema" : "abs_asgc",
+        "pk" : "cd_code06",
+        "retColumns" : "cd_code06 as feature_code, cd_code06 as feature_name"
+      },
+      "queries" : {
+        "0-6" : {
+          "table" : "cd06gen0_05",
+          "addExpr" : "false = true"
+        },
+        "7-8" : {
+          "table" : "cd06gen0_05",
+          "addExpr" : ""
+        },
+        "9-10" : {
+          "table" : "cd06gen0_01",
+          "addExpr" : ""
+        },
+        "11-12" : {
+          "table" : "cd06gen0_005",
+          "addExpr" : ""
+        },
+        "13-14" : {
+          "table" : "cd06gen0_001",
+          "addExpr" : ""
+        },
+        "15-18" : {
+          "table" : "cd06aaust",
+          "addExpr" : ""
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "name": "ARTIFACTID",
+  "version": "ARTIFACTVERSION",
+  "description": "Generation and serving of vector tiles",
+  "private": true,
+  "keywords": [ "aurin", "vector", "tile" ],
+  "author": {
+    "name": "Luca Morandini",
+    "email": "luca.morandini@unimelb.edu.au"
+  },
+  "contributors": [],
+  "licenses" : [{
+    "type": "Apache",
+    "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+  }],
+  "main": "./app.js",
+  "dependencies": {
+    "nodejs-commons": "NODEJSCOMMONSVERSION",
+    "express": "EXPRESSVERSION",
+    "util": "UTILVERSION",
+    "swagger-node-express": "SWAGGERVERSION",
+    "futures": "FUTURESVERSION",
+    "sequence": "SEQUENCEVERSION",
+    "forEachAsync": "FOREACHASYNCVERSION",
+    "util": "UTILVERSION",
+    "sax": "SAXVERSION",
+    "pg": "PGVERSION",
+    "nano": "NANOVERSION",
+    "mocha": "MOCHAVERSION",
+    "chai": "CHAIVERSION",
+    "xunit-file": "XUNITFILEVERSION",
+    "istanbul": "ISTANBULVERSION",
+    "mocha-istanbul": "MOCHAISTVERSION",
+    "topojson" : "TOPOJSONVERSION"
+  },
+  "devDependencies": {
+    "nano-mock": "NANOMOCKVERSION",
+    "pg-mock": "PGMOCKVERSION",
+    "sandboxed-module": "SANDBOXEDVERSION"
+  },
+  "scripts": {},
+  "engines": {
+    "node": "NODEVERSION"
+  },
+  "_id": "GROUPID.ARTIFACTID@ARTIFACTVERSION",
+  "optionalDependencies": {},
+  "_engineSupported": true,
+  "_npmVersion": "NPMVERSION",
+  "_nodeVersion": "NODEVERSION",
+  "_defaultsLoaded": false,
+  "_from": ""
+}

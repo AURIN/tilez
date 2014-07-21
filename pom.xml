@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2011-2014 The AURIN Project Licensed under the Apache License, 
+  Version 2.0 (the "License"); you may not use this file except in compliance 
+  with the License. You may obtain a copy of the License at [apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0) 
+  Unless required by applicable law or agreed to in writing, software distributed 
+  under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+  OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+  the specific language governing permissions and limitations under the License. -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://`ww.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>au.org.aurin</groupId>
+  <artifactId>vector-tile-server</artifactId>
+  <version>0.3.4-SNAPSHOT</version>
+
+  <properties>
+    <version>${project.version}</version>
+    <nodeVersion>v0.10.x</nodeVersion>
+    <npmVersion>>=1.2.x</npmVersion>
+    <expressVersion>2.5.x</expressVersion>
+    <foreachasyncVersion>2.2.0</foreachasyncVersion>
+    <futuresVersion>2.3.1</futuresVersion>
+    <sequenceVersion>2.2.1</sequenceVersion>
+    <utilVersion>0.4.9</utilVersion>
+    <pgVersion>2.2.0</pgVersion>
+    <pgMockVersion>git+ssh://git@github.com:AURIN/pg-mock.git#v0.2.4</pgMockVersion>
+    <nanoVersion>git+ssh://git@github.com:AURIN/nano.git#aurin</nanoVersion>
+    <nanomockVersion>git+ssh://git@github.com:AURIN/nano-mock.git#v0.1.1</nanomockVersion>
+    <clarinetVersion>0.7.2</clarinetVersion>
+    <saxVersion>0.5.1</saxVersion>
+    <chaiVersion>1.5.0</chaiVersion>
+    <mochaVersion>1.5.0</mochaVersion>
+    <mochaVersion>git+ssh://git@github.com:AURIN/mocha.git</mochaVersion>
+    <xunitfileVersion>0.0.5</xunitfileVersion>
+    <istanbulVersion>0.1.37</istanbulVersion>
+    <mochaistVersion>0.2.0</mochaistVersion>
+    <topojsonVersion>1.6.0</topojsonVersion>
+    <nodejscommonsVersion>git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.4.5-SNAPSHOT</nodejscommonsVersion>
+    <expressVersion>2.5.x</expressVersion>
+    <sandboxedVersion>0.2.0</sandboxedVersion>
+    <swaggerVersion>git+ssh://git@github.com:AURIN/swagger-node-express.git#aurin</swaggerVersion>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.sourceEncoding>UTF-8</project.reporting.sourceEncoding>
+
+    <sonar.sources>src</sonar.sources>
+    <sonar.tests>test</sonar.tests>
+    <sonar.language>js</sonar.language>
+    <sonar.profile>Node</sonar.profile>
+    <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+    <sonar.javascript.reportsPath>target/reports</sonar.javascript.reportsPath>
+    <sonar.javascript.jstest.reportsPath>target/reports</sonar.javascript.jstest.reportsPath>
+    <sonar.javascript.coveragePlugin>lcov</sonar.javascript.coveragePlugin>
+    <sonar.javascript.lcov.reportPath>target/reports/coverage.lcov</sonar.javascript.lcov.reportPath>
+  </properties>
+
+  <parent>
+    <groupId>au.org.aurin</groupId>
+    <artifactId>aurin-project</artifactId>
+    <version>0.2.6</version>
+  </parent>
+
+  <prerequisites>
+    <maven>3.0.0</maven>
+  </prerequisites>
+
+  <scm>
+    <url>scm:git:ssh//github.com:AURIN/wfs-test.git</url>
+  </scm>
+
+  <ciManagement>
+    <url>https://ci.eresearch.aurin.org.au/</url>
+  </ciManagement>
+
+  <organization>
+    <url>https://aurin.org.au</url>
+    <name>AURIN</name>
+  </organization>
+
+  <repositories>
+    <repository>
+      <id>aurin</id>
+      <url>https://mvn.aurin.org.au/nexus/content/repositories/stable/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+    <repository>
+      <id>aurin-snapshots</id>
+      <url>https://mvn.aurin.org.au/nexus/content/repositories/snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <dependencies />
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>1.7</version>
+        <dependencies>
+          <dependency>
+            <groupId>ant</groupId>
+            <artifactId>ant-jsch</artifactId>
+            <version>1.6.5</version>
+          </dependency>
+          <dependency>
+            <groupId>ant-contrib</groupId>
+            <artifactId>ant-contrib</artifactId>
+            <version>1.0b3</version>
+            <exclusions>
+              <exclusion>
+                <groupId>ant</groupId>
+                <artifactId>ant</artifactId>
+              </exclusion>
+            </exclusions>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <id>compile</id>
+            <phase>compile</phase>
+            <configuration>
+              <target>
+                <echo
+                  message="========== installing public dependencies ===================" />
+                <exec executable="npm" dir="${project.basedir}"
+                  failonerror="true">
+                  <arg value="install" />
+                </exec>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>unit-test</id>
+            <phase>test</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target id="unit-test" unless="skipTests" if="unitTest">
+                <mkdir dir="target/reports" />
+                <exec executable="node_modules/.bin/istanbul" dir="."
+                  failonerror="true" output="target/reports/istanbul.txt">
+                  <env key="ISTANBUL_REPORTERS" value="none" />
+                  <env key="XUNIT_FILE" value="target/reports/TESTS-xunit.xml" />
+                  <arg
+                    line="  cover node_modules/.bin/_mocha --dir target/reports -- -R xunit-file test/test-unit.js " />
+                </exec>
+                <exec executable="node_modules/.bin/istanbul" dir="."
+                  failonerror="false" output="target/reports/istanbul-lcov.txt">
+                  <arg line=" report lcov --dir target/reports" />
+                </exec>
+                <exec executable="node_modules/.bin/istanbul" dir="."
+                  failonerror="false" output="target/reports/istanbul-lcov.txt">
+                  <arg line=" report cobertura --dir target/reports" />
+                </exec>
+                <exec executable="cp" dir="." failonerror="true">
+                  <arg
+                    line="  target/reports/lcov.info target/reports/coverage.lcov " />
+                </exec>
+                <replaceregexp match="\/mnt\/workspace\/"
+                  replace="/var/lib/jenkins/workspace/" file="target/reports/coverage.lcov"
+                  flags="gm" />
+              </target>
+            </configuration>
+          </execution>
+          <execution>
+            <id>integration-test</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target id="integration-test" unless="skipTests"
+                if="integrationTest">
+                <exec executable="node_modules/.bin/mocha" dir="."
+                  failonerror="false"
+                  output="target/reports/unit-mochaintegrationTest.xml">
+                  <arg
+                    line="--reporter xunit --no-colors --timeout 200000 --grep test-integration" />
+                </exec>
+              </target>
+            </configuration>
+          </execution>
+          <execution>
+            <id>stress-test</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target id="stress-test" unless="skipTests" if="stressTest">
+                <exec executable="node_modules/.bin/mocha" dir="."
+                  failonerror="true">
+                  <arg line="--no-colors --timeout 400000 --grep test-stress" />
+                </exec>
+              </target>
+            </configuration>
+          </execution>
+          <execution>
+            <id>load-write</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target id="load-write" unless="skipTests" if="writeTest">
+                <exec executable="node_modules/.bin/mocha" dir="."
+                  failonerror="true">
+                  <arg
+                    line="--no-colors --timeout 400000 --grep test-loadwrite" />
+                </exec>
+              </target>
+            </configuration>
+          </execution>
+          <execution>
+            <id>load-test</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target id="load-test" unless="skipTests" if="loadTest">
+                <exec executable="node_modules/.bin/mocha" dir="."
+                  failonerror="true">
+                  <arg
+                    line="--no-colors --timeout 4000000 --grep test-loadread" />
+                </exec>
+              </target>
+            </configuration>
+          </execution>
+          <execution>
+            <id>install-views</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target id="install-views" if="installViews">
+                <exec executable="couchapp" dir="." failonerror="true">
+                  <arg value="push" />
+                  <arg value="./lib/couchdb/vts" />
+                  <!-- ${couchdb.username}:${couchdb.password}@ -->
+                  <arg
+                    value="${couchdb.protocol}://${couchdb.host}:${couchdb.port}/${couchdb.vts.db}" />
+                </exec>
+                <exec executable="curl" dir="." failonerror="true">
+                  <arg value="-X" />
+                  <arg value="GET" />
+                  <arg
+                    value="${couchdb.protocol}://${couchdb.host}:${couchdb.port}/${couchdb.vts.db}/_design/vts/_view/tilesize" />
+                </exec>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>properties-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>replacer</artifactId>
+        <version>1.5.1</version>
+        <executions>
+          <execution>
+            <id>replace-package-info</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>replace</goal>
+            </goals>
+            <configuration>
+              <file>./package.template.json</file>
+              <outputFile>./package.json</outputFile>
+              <replacements>
+                <replacement>
+                  <token>GROUPID</token>
+                  <value>${project.groupId}</value>
+                </replacement>
+                <replacement>
+                  <token>ARTIFACTID</token>
+                  <value>${project.artifactId}</value>
+                </replacement>
+                <replacement>
+                  <token>ARTIFACTVERSION</token>
+                  <value>${project.version}</value>
+                </replacement>
+                <replacement>
+                  <token>NODEVERSION</token>
+                  <value>${nodeVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>NPMVERSION</token>
+                  <value>${npmVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>EXPRESSVERSION</token>
+                  <value>${expressVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>SAXVERSION</token>
+                  <value>${saxVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>CLARINETVERSION</token>
+                  <value>${clarinetVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>UTILVERSION</token>
+                  <value>${utilVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>FUTURESVERSION</token>
+                  <value>${futuresVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>SEQUENCEVERSION</token>
+                  <value>${sequenceVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>MOCHAVERSION</token>
+                  <value>${mochaVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>CHAIVERSION</token>
+                  <value>${chaiVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>ISTANBULVERSION</token>
+                  <value>${istanbulVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>MOCHAISTVERSION</token>
+                  <value>${mochaistVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>XUNITFILEVERSION</token>
+                  <value>${xunitfileVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>FOREACHASYNCVERSION</token>
+                  <value>${foreachasyncVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>PGVERSION</token>
+                  <value>${pgVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>PGMOCKVERSION</token>
+                  <value>${pgMockVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>NANOVERSION</token>
+                  <value>${nanoVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>NANOMOCKVERSION</token>
+                  <value>${nanomockVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>TOPOJSONVERSION</token>
+                  <value>${topojsonVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>SWAGGERVERSION</token>
+                  <value>${swaggerVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>SANDBOXEDVERSION</token>
+                  <value>${sandboxedVersion}</value>
+                </replacement>
+                <replacement>
+                  <token>NODEJSCOMMONSVERSION</token>
+                  <value>${nodejscommonsVersion}</value>
+                </replacement>
+              </replacements>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2</version>
+        <executions>
+          <execution>
+            <id>make-zip-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <finalName>${project.name}-${project.version}</finalName>
+              <appendAssemblyId>false</appendAssemblyId>
+              <descriptors>
+                <descriptor>assembly-zip.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>rpm-maven-plugin</artifactId>
+        <version>2.1-alpha-3</version>
+        <executions>
+          <execution>
+            <id>attach-rpm</id>
+            <goals>
+              <goal>attached-rpm</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <copyright>2014 AURIN</copyright>
+          <distribution>AURIN</distribution>
+          <group>Application/Aurin</group>
+          <packager>Guido Grazioli</packager>
+          <defineStatements>
+             <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
+          </defineStatements>
+          <autoProvides>false</autoProvides>
+          <autoRequires>false</autoRequires>
+          <workarea>/tmp/rpm</workarea>
+          <mappings>
+              <mapping>
+                  <directory>/opt/aurin/${project.artifactId}-${project.version}</directory>
+                  <username>aurin</username>
+                  <groupname>aurin</groupname>
+                  <recurseDirectories>false</recurseDirectories>
+                  <sources>
+                      <source>
+                          <location>app.js</location>
+                      </source>
+                  </sources>
+              </mapping>
+              <mapping>
+                  <directory>/opt/aurin/${project.artifactId}-${project.version}/src</directory>
+                  <username>aurin</username>
+                  <groupname>aurin</groupname>
+                  <recurseDirectories>false</recurseDirectories>
+                  <sources>
+                      <source>
+                          <location>src</location>
+                      </source>
+                  </sources>
+              </mapping>
+              <mapping>
+                  <directory>/opt/aurin/${project.artifactId}-${project.version}/lib</directory>
+                  <username>aurin</username>
+                  <groupname>aurin</groupname>
+                  <recurseDirectories>true</recurseDirectories>
+                  <sources>
+                      <source>
+                          <location>lib</location>
+                      </source>
+                  </sources>
+              </mapping>
+              <mapping>
+                  <directory>/opt/aurin/${project.artifactId}-${project.version}/node_modules</directory>
+                  <username>aurin</username>
+                  <groupname>aurin</groupname>
+                  <recurseDirectories>true</recurseDirectories>
+                  <sources>
+                      <source>
+                          <location>node_modules</location>
+                      </source>
+                  </sources>
+              </mapping>
+              <mapping>
+                  <directory>/opt/aurin/${project.artifactId}-${project.version}/logs</directory>
+                  <username>aurin</username>
+                  <groupname>aurin</groupname>
+              </mapping>
+              <mapping>
+                  <directory>/opt/aurin</directory>
+                  <filemode>750</filemode>
+                  <username>aurin</username>
+                  <groupname>aurin</groupname>
+                  <recurseDirectories>false</recurseDirectories>
+                  <directoryIncluded>false</directoryIncluded>
+                  <sources>
+                      <softlinkSource>
+                          <location>/opt/aurin/${project.artifactId}-${project.version}</location>
+                          <destination>${project.artifactId}</destination>
+                      </softlinkSource>
+                  </sources>
+              </mapping>
+          </mappings>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+  <issueManagement>
+    <system>Redmine</system>
+    <url>https://projects.eresearch.unimelb.edu.au/</url>
+  </issueManagement>
+
+  <developers>
+    <developer>
+      <id>LM</id>
+      <name>Luca Morandini</name>
+      <email>lmorandini [you know] unimelb.edu.au</email>
+    </developer>
+  </developers>
+
+</project>

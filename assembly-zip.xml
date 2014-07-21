@@ -1,0 +1,19 @@
+<assembly>
+  <id>zip</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+      <fileSet>
+        <directory>.</directory>
+        <outputDirectory>/</outputDirectory>
+        <excludes>
+          <exclude>test/**</exclude>
+          <exclude>target/**</exclude>
+          <exclude>assembly*.xml</exclude>
+          <exclude>pom.xml</exclude>
+        </excludes>
+      </fileSet>
+  </fileSets>
+</assembly>

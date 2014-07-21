@@ -1,0 +1,20 @@
+{
+  "layers" : {
+    "lga" : {
+      "general" : {
+        "proj" : "EPSG:4283",
+        "displayProj" : "EPSG:3857",
+        "geomcol" : "wkb_geometry",
+        "schema" : "public",
+        "pk" : "lga_code06",
+        "retColumns" : "lga_code06 as feature_code, lga_name06 as feature_name"
+      },
+      "queries" : {
+        "0-18" : {
+          "table" : "lga06gen0_05",
+          "addExpr" : ""
+        }
+      }
+    }
+  }
+}
