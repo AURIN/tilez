@@ -24,17 +24,17 @@ describe(
     var expect = chai.expect;
     var fs = require("fs");
     var testData = require("./testdata.js");
-    var vtsCommons = require("../src/commons.js");
+    var tilezCommons = require("../src/commons.js");
     var tc = require("./commons.js");
     var commons;
     var options;
-    var genConfig = require("../config.json");
+    var genConfig = require("../aurin-config.json");
     var apiProcess = null;
     var dbPool = null;
     var http = null;
     var nano = null;
     var pg = null;
-    var vts = null;
+    var tilez = null;
 
     before(function (done) {
       console.log("Start of integration tests...");
@@ -47,7 +47,7 @@ describe(
         options = args.options;
         commons = args.commons;
         apiProcess = args.apiProcess;
-        vts = args.vts;
+        tilez = args.tilez;
         nano = args.nano;
         dbPool = args.dbPool;
         http = args.http;
@@ -57,8 +57,8 @@ describe(
     });
 
     it("returns 404 for a missing GeoJSON layer", function (done) {
-      vtsCommons.lookUpTile({
-        cache: vts.cacheDb,
+      tilezCommons.lookUpTile({
+        cache: tilez.cacheDb,
         layer: "xxx",
         z: 1,
         x: 2,
@@ -73,7 +73,7 @@ describe(
     it(
       "returns an empty list when no layers are preent and a list of layers is requested",
       function (done) {
-        options.path = options.vtsPath + "/layers";
+        options.path = options.tilezPath + "/layers";
         options.method = "GET";
         options.headers = {};
         http.request(options,function (response) {
@@ -87,8 +87,8 @@ describe(
       });
 
     it("returns 404 for a missing GeoJSON tile", function (done) {
-      vtsCommons.lookUpTile({
-        cache: vts.cacheDb,
+      tilezCommons.lookUpTile({
+        cache: tilez.cacheDb,
         layer: "street",
         z: 999,
         x: 2,
@@ -101,8 +101,8 @@ describe(
     });
 
     it("returns 404 for a missing GeoJSON tile", function (done) {
-      vtsCommons.lookUpTile({
-        cache: vts.cacheDb,
+      tilezCommons.lookUpTile({
+        cache: tilez.cacheDb,
         layer: "street",
         z: 999,
         x: 2,
@@ -115,8 +115,8 @@ describe(
     });
 
     it("generates a GeoJSON tile", function (done) {
-      vtsCommons.generateTile({
-        bbox: vtsCommons.tile2bbox(16, 59147, 40212),
+      tilezCommons.generateTile({
+        bbox: tilezCommons.tile2bbox(16, 59147, 40212),
         zoom: 16,
         dbPool: dbPool,
         genConfig: genConfig,
@@ -131,8 +131,8 @@ describe(
     });
 
     it("generates a TopoJSON tile", function (done) {
-      vtsCommons.generateTile({
-        bbox: vtsCommons.tile2bbox(16, 59147, 40208),
+      tilezCommons.generateTile({
+        bbox: tilezCommons.tile2bbox(16, 59147, 40208),
         zoom: 16,
         dbPool: dbPool,
         genConfig: genConfig,
@@ -147,8 +147,8 @@ describe(
     });
 
     it("generates a GeoJSON tile for an undefined zoom level", function (done) {
-      vtsCommons.generateTile({
-        bbox: vtsCommons.tile2bbox(1, 1, 1),
+      tilezCommons.generateTile({
+        bbox: tilezCommons.tile2bbox(1, 1, 1),
         zoom: 1,
         dbPool: dbPool,
         genConfig: genConfig,
@@ -163,8 +163,8 @@ describe(
     });
 
     it("generates an empty GeoJSON tile", function (done) {
-      vtsCommons.generateTile({
-        bbox: vtsCommons.tile2bbox(1, 2, 888),
+      tilezCommons.generateTile({
+        bbox: tilezCommons.tile2bbox(1, 2, 888),
         zoom: 4,
         dbPool: dbPool,
         genConfig: genConfig,
@@ -209,10 +209,10 @@ describe(
             }
           }
         };
-        vtsCommons
+        tilezCommons
           .generateTile(
           {
-            bbox: vtsCommons.tile2bbox(16, 59147, 40208),
+            bbox: tilezCommons.tile2bbox(16, 59147, 40208),
             zoom: 16,
             dbPool: dbPool,
             genConfig: genWrongConfig,
@@ -229,8 +229,8 @@ describe(
       });
 
     it("seeds the cache with a GeoJSON tile", function (done) {
-      vtsCommons.saveTileInCache({
-        cache: vts.cacheDb,
+      tilezCommons.saveTileInCache({
+        cache: tilez.cacheDb,
         layer: "street",
         z: 16,
         x: 59147,
@@ -244,8 +244,8 @@ describe(
     });
 
     it("looks up and returns the newly-inserted GeoJSON tile", function (done) {
-      vtsCommons.lookUpTile({
-        cache: vts.cacheDb,
+      tilezCommons.lookUpTile({
+        cache: tilez.cacheDb,
         layer: "street",
         z: 16,
         x: 59147,
@@ -259,8 +259,8 @@ describe(
     });
 
     it("seeds the cache with a null GeoJSON tile", function (done) {
-      vtsCommons.saveTileInCache({
-        cache: vts.cacheDb,
+      tilezCommons.saveTileInCache({
+        cache: tilez.cacheDb,
         layer: "street",
         z: 1,
         x: 2,
@@ -274,8 +274,8 @@ describe(
     });
 
     it("looks up a non-existing GeoJSON tile", function (done) {
-      vtsCommons.lookUpTile({
-        cache: vts.cacheDb,
+      tilezCommons.lookUpTile({
+        cache: tilez.cacheDb,
         layer: "street",
         z: 1,
         x: 2,
@@ -288,7 +288,7 @@ describe(
     });
 
     it("returns an error for a non-existing layer ReST GeoJSON request", function (done) {
-      options.path = options.vtsPath + "/layers/xxx/1/2/3.json";
+      options.path = options.tilezPath + "/layers/xxx/1/2/3.json";
       options.method = "GET";
       options.headers = {};
       http.request(options,function (response) {
@@ -301,7 +301,7 @@ describe(
     });
 
     it("returns a tile via a ReST GeoJSON request", function (done) {
-      options.path = options.vtsPath + "/layers/street/1/2/3.json";
+      options.path = options.tilezPath + "/layers/street/1/2/3.json";
       options.method = "GET";
       options.headers = {};
       http.request(options,function (response) {
@@ -311,7 +311,7 @@ describe(
     });
 
     it("returns info about layers #1", function (done) {
-      options.path = options.vtsPath + "/layers";
+      options.path = options.tilezPath + "/layers";
       options.method = "GET";
       options.headers = {};
       http.request(options,function (response) {
@@ -326,8 +326,8 @@ describe(
     });
 
     it("seeds the cache with another tile of another layer", function (done) {
-      vtsCommons.saveTileInCache({
-        cache: vts.cacheDb,
+      tilezCommons.saveTileInCache({
+        cache: tilez.cacheDb,
         layer: "lga",
         z: 16,
         x: 59147,
@@ -341,7 +341,7 @@ describe(
     });
 
     it("returns info about layers #2", function (done) {
-      options.path = options.vtsPath + "/layers";
+      options.path = options.tilezPath + "/layers";
       options.method = "GET";
       options.headers = {};
       http.request(options,function (response) {
@@ -357,7 +357,7 @@ describe(
     });
 
     it("drops a layer from cache", function (done) {
-      options.path = options.vtsPath + "/layers/street";
+      options.path = options.tilezPath + "/layers/street";
       options.method = "DELETE";
       options.headers = {};
       http.request(options,function (response) {
@@ -370,7 +370,7 @@ describe(
     });
 
     it("returns info about layers after dropping a layer", function (done) {
-      options.path = options.vtsPath + "/layers";
+      options.path = options.tilezPath + "/layers";
       options.method = "GET";
       options.headers = {};
       http.request(options,function (response) {
@@ -385,8 +385,8 @@ describe(
     });
 
     it("looks up a tile of a deleted layer", function (done) {
-      vtsCommons.lookUpTile({
-        cache: vts.cacheDb,
+      tilezCommons.lookUpTile({
+        cache: tilez.cacheDb,
         layer: "street",
         z: 16,
         x: 59147,
@@ -399,8 +399,8 @@ describe(
     });
 
     it("looks up a tile of an existing layer", function (done) {
-      vtsCommons.lookUpTile({
-        cache: vts.cacheDb,
+      tilezCommons.lookUpTile({
+        cache: tilez.cacheDb,
         layer: "lga",
         z: 16,
         x: 59147,
@@ -413,7 +413,7 @@ describe(
     });
 
     it("drops another layer from cache", function (done) {
-      options.path = options.vtsPath + "/layers/lga";
+      options.path = options.tilezPath + "/layers/lga";
       options.method = "DELETE";
       options.headers = {};
       http.request(options,function (response) {
@@ -426,7 +426,7 @@ describe(
     });
 
     it("seeds a layer in GeoJSON", function (done) {
-      options.path = options.vtsPath + "/layers/lga.json?min=1&max=5";
+      options.path = options.tilezPath + "/layers/lga.json?min=1&max=5";
       options.method = "POST";
       http.request(options,function (response) {
         expect(200).to.equal(response.statusCode);
@@ -438,7 +438,7 @@ describe(
     });
 
     it("returns info about the just-seeded GeoJSONlayer", function (done) {
-      options.path = options.vtsPath + "/layers";
+      options.path = options.tilezPath + "/layers";
       options.method = "GET";
       options.headers = {};
       http.request(options,function (response) {
@@ -453,7 +453,7 @@ describe(
     });
 
     it("seeds a layer in TopoJSON", function (done) {
-      options.path = options.vtsPath + "/layers/lga.topojson?min=1&max=5";
+      options.path = options.tilezPath + "/layers/lga.topojson?min=1&max=5";
       options.method = "POST";
       options.headers = {};
       http.request(options,function (response) {
@@ -466,7 +466,7 @@ describe(
     });
 
     it("returns info about the just-seeded JSON and TopoJSON layer", function (done) {
-      options.path = options.vtsPath + "/layers";
+      options.path = options.tilezPath + "/layers";
       options.method = "GET";
       options.headers = {};
       http.request(options,function (response) {
@@ -484,7 +484,7 @@ describe(
     it(
         "returns the CORS headers",
         function(done) {
-          options.path = options.vtsPath + "/layers/lga/1/2/3.json";
+          options.path = options.tilezPath + "/layers/lga/1/2/3.json";
           options.method = "GET";
           options.headers = {};
           http

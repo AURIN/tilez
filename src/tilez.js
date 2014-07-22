@@ -1,7 +1,7 @@
 /**
- * vts.js
+ * tilez.js
  *
- * Server part of the VTS application, it could be run as a stand-alone
+ * Server part of the Tilez application, it could be run as a stand-alone
  * application (from app.js) or as a mock process during the test.
  *
  * The module exports: functions: startServer, setConfigDefaults objects: nano, dbPool
@@ -24,7 +24,7 @@
 "use strict";
 var util = require("util");
 
-var vts = exports;
+var tilez = exports;
 
 /*
  * Defines and starts server @param commons NodeJS commons library
@@ -36,37 +36,37 @@ exports.startServer = function(commons, callback) {
   var express = require("express");
   var pg = require("pg");
   var util = require("util");
-  var vtsCommons = require("./commons.js");
+  var tilezCommons = require("./commons.js");
 
   /*
    * Loads general configuration from a JSON file that is defined in the
    * properties (the config file location must be relative to the home directory
-   * of VTS)
+   * of tilez)
    */
   var genConfig = require(require("path").join(__dirname, "..",
-      commons.getProperty("aurin.vts.config")));
+      commons.getProperty("aurin.tilez.config")));
 
   /*
    * Sets some default values, if missing, in the configuration
    */
-  vts.setConfigDefaults = function(conf) {
+  tilez.setConfigDefaults = function(conf) {
     Object.getOwnPropertyNames(conf.layers).forEach(
         function(layerName) {
           var layer = conf.layers[layerName];
           layer.general.proj = layer.general.proj
-              || commons.getProperty("aurin.vts.proj.default");
+              || commons.getProperty("aurin.tilez.proj.default");
           layer.general.displayProj = layer.general.displayProj
-              || commons.getProperty("aurin.vts.displayproj.default");
+              || commons.getProperty("aurin.tilez.displayproj.default");
         });
   };
-  vts.setConfigDefaults(genConfig);
+  tilez.setConfigDefaults(genConfig);
 
   /*
    * Sets max sockets pooling TODO: how do we know it works ?
    */
   var http = require("http");
   http.globalAgent.maxSockets = Number(commons
-      .getProperty("aurin.vts.maxSockets"));
+      .getProperty("aurin.tilez.maxSockets"));
 
   // Loads libraries
   var app = express.createServer();
@@ -74,14 +74,14 @@ exports.startServer = function(commons, callback) {
   /*
    * Sets up the API doc generation tool
    */
-  vts.swagger = require("swagger-node-express");
+  tilez.swagger = require("swagger-node-express");
 
   /*
    * Configures application
    */
 
   // NOTE: these is to override Swagger's default headers
-  vts.swagger.setHeaders = function(res) {
+  tilez.swagger.setHeaders = function(res) {
   };
 
   // Sets CORS headers
@@ -100,14 +100,14 @@ exports.startServer = function(commons, callback) {
   });
 
   // Sets a connection to CouchDB as cache persistence mechanism
-  vts.nano = require("nano")(
+  tilez.nano = require("nano")(
       {
         "url" : commons.getProperty("couchdb.protocol") + "://"
             + commons.getProperty("couchdb.host") + ":"
             + commons.getProperty("couchdb.port")
       });
-  vts.cacheDb = vts.nano.use(commons.getProperty("couchdb.vts.db"));
-  vts.genConfig = genConfig;
+  tilez.cacheDb = tilez.nano.use(commons.getProperty("couchdb.tilez.db"));
+  tilez.genConfig = genConfig;
 
   var swParam = require("swagger-node-express").params;
 
@@ -118,7 +118,7 @@ exports.startServer = function(commons, callback) {
   /**
    * Initialization
    */
-  vts.dbPool = {
+  tilez.dbPool = {
     pg : pg,
     pool : null,
     config : {
@@ -131,17 +131,17 @@ exports.startServer = function(commons, callback) {
   };
 
   // Checks connectivity with PostgreSQL
-  vts.dbPool.pg.connect(vts.dbPool.config, function(err, client, done) {
+  tilez.dbPool.pg.connect(tilez.dbPool.config, function(err, client, done) {
     if (err) {
-      commons.logger.error("Vector-Tile-Server unable to connect to: "
-          + JSON.stringify(vts.dbPool.config) + " due to error: "
+      commons.logger.error("Tilez unable to connect to: "
+          + JSON.stringify(tilez.dbPool.config) + " due to error: "
           + JSON.stringify(err))
           + " on " + JSON.stringify(client);
       process.exit(2);
     } else {
-      vts.dbPool.pool = vts.dbPool.pg.pools.getOrCreate(vts.dbPool.config);
-      vts.dbPool.pg.defaults.poolSize = commons
-          .getProperty("aurin.vts.pg.poolSize");
+      tilez.dbPool.pool = tilez.dbPool.pg.pools.getOrCreate(tilez.dbPool.config);
+      tilez.dbPool.pg.defaults.poolSize = commons
+          .getProperty("aurin.tilez.pg.poolSize");
       done();
     }
   });
@@ -149,19 +149,19 @@ exports.startServer = function(commons, callback) {
   /*
    * Exports data types
    */
-  vts.models = require("../lib/docs/models.js");
+  tilez.models = require("../lib/docs/models.js");
 
   /*
    * API methods
    */
 
-  vts.getTile = {
+  tilez.getTile = {
     "spec" : {
       "description" : "",
       "path" : "/layers/{layer}/{z}/{x}/{y}\.:ext",
       "notes" : "",
       "summary" : "Returns a GeoJSON representation of a tile of the given layer, supports formats: "
-          + vtsCommons.formats,
+          + tilezCommons.formats,
       "method" : "GET",
       "params" : [ swParam.path("layer", "ID of layer", "string"),
           swParam.path("z", "zoom-level of tile", "string"),
@@ -177,19 +177,19 @@ exports.startServer = function(commons, callback) {
 
       // Checks format requested (extension)
       try {
-        var format = vtsCommons.checkFormat(req);
+        var format = tilezCommons.checkFormat(req);
       } catch (err) {
-        return vts.swagger.stopWithError(res, err);
+        return tilez.swagger.stopWithError(res, err);
       }
 
       // Checks the existence of tile in cache
-      vtsCommons.lookUpTile({
+      tilezCommons.lookUpTile({
         layer : req.params.layer,
         z : Number(req.params.z),
         x : Number(req.params.x),
         y : Number(req.params.y),
         format : format,
-        cache : vts.cacheDb
+        cache : tilez.cacheDb
       }, function(err, json) {
 
         // If tile exists, returns it
@@ -199,7 +199,7 @@ exports.startServer = function(commons, callback) {
             response : res,
             status : 200,
             contentType : "application/json",
-            maxAge : commons.getProperty("aurin.vts.maxage.default")
+            maxAge : commons.getProperty("aurin.tilez.maxage.default")
           });
         }
 
@@ -207,7 +207,7 @@ exports.startServer = function(commons, callback) {
         // aborts
         if (err && err["status-code"] !== 404) {
           commons.logger.error(err);
-          return vts.swagger.stopWithError(res, {
+          return tilez.swagger.stopWithError(res, {
             code : 500,
             message : JSON.stringify(err),
             reason : 'unknown problem in tile lookup'
@@ -216,12 +216,12 @@ exports.startServer = function(commons, callback) {
 
         // Since the tile does not exists, start generating it
         // Checks existence of layer
-        var layer = vts.genConfig.layers[req.params.layer];
+        var layer = tilez.genConfig.layers[req.params.layer];
 
         if (typeof layer === "undefined") {
           var errMessage = "Layer " + req.params.layer + " is undefined";
           commons.logger.error(errMessage);
-          return vts.swagger.stopWithError(res, {
+          return tilez.swagger.stopWithError(res, {
             code : 500,
             message : errMessage,
             reason : 'undefined layer'
@@ -229,16 +229,16 @@ exports.startServer = function(commons, callback) {
         }
 
         // Generates the tile and saves it in the cache
-        vtsCommons.generateAndSaveTile({
+        tilezCommons.generateAndSaveTile({
           layer : req.params.layer,
           tile : {
             z : Number(req.params.z),
             x : Number(req.params.x),
             y : Number(req.params.y)
           },
-          dbPool : vts.dbPool,
-          cache : vts.cacheDb,
-          genConfig : vts.genConfig,
+          dbPool : tilez.dbPool,
+          cache : tilez.cacheDb,
+          genConfig : tilez.genConfig,
           format : format,
           commons : commons
         }, function(errGen, jsonTile) {
@@ -251,7 +251,7 @@ exports.startServer = function(commons, callback) {
 
           // If error and the tile is null, signals the error
           if (errGen && !jsonTile) {
-            return vts.swagger.stopWithError(res, {
+            return tilez.swagger.stopWithError(res, {
               code : 500,
               message : JSON.stringify(errGen),
               reason : 'could not generate tile'
@@ -269,7 +269,7 @@ exports.startServer = function(commons, callback) {
     }
   };
 
-  vts.getLayers = {
+  tilez.getLayers = {
     "spec" : {
       "description" : "",
       "path" : "/layers",
@@ -286,12 +286,12 @@ exports.startServer = function(commons, callback) {
     "action" : function(req, res) {
       commons.logRequest(req);
 
-      vts.cacheDb.listview("vts", "layers", "tilesize", {
+      tilez.cacheDb.listview("tilez", "layers", "tilesize", {
         group_level : 4
       }, function(err, docs, headers) {
         if (err) {
           commons.logger.error(err);
-          return vts.swagger.stopWithError(res, {
+          return tilez.swagger.stopWithError(res, {
             code : 500,
             message : err.message,
             reason : 'cannot list layers'
@@ -309,14 +309,14 @@ exports.startServer = function(commons, callback) {
     }
   };
 
-  vts.seedCache = {
+  tilez.seedCache = {
     "spec" : {
       "description" : "",
       "path" : "/layers/{layer}\.:ext",
       "notes" : "",
       "summary" : "Pre-populates the cache with all the tile included within two zoom levels. "
           + "Returns the number of tiles added. It supports formats: "
-          + vtsCommons.formats,
+          + tilezCommons.formats,
       "method" : "POST",
       "params" : [ swParam.path("layer", "ID of layer", "string"),
           swParam.query("min", "Minmum zoom for the seeding", "number", true),
@@ -331,15 +331,15 @@ exports.startServer = function(commons, callback) {
 
       // Checks format requested (extension)
       try {
-        var format = vtsCommons.checkFormat(req);
+        var format = tilezCommons.checkFormat(req);
       } catch (err) {
-        return vts.swagger.stopWithError(res, err);
+        return tilez.swagger.stopWithError(res, err);
       }
 
       // Checks min and max parameters
       if (typeof req.query["min"] === "undefined"
           || typeof req.query["max"] === "undefined") {
-        return vts.swagger.stopWithError(res, {
+        return tilez.swagger.stopWithError(res, {
           code : 400,
           message : "Missing min or max parameters",
           reason : 'missing parameters'
@@ -351,18 +351,18 @@ exports.startServer = function(commons, callback) {
       // Gets the extent of layer
       // NOTE: since the higher the zoom level, the more features that level
       // has, max is supposed to have a bigger (or equal) extent than min
-      var layerConfig = vtsCommons.getQueryEntry(req.params.layer, max,
-          vts.genConfig);
+      var layerConfig = tilezCommons.getQueryEntry(req.params.layer, max,
+          tilez.genConfig);
       if (layerConfig === null) {
-        return vts.swagger.stopWithError(res, {
+        return tilez.swagger.stopWithError(res, {
           code : 400,
           message : "query configuration not found for: " + req.params.layer,
           reason : 'could not find query configuration'
         });
       }
 
-      vtsCommons.query({
-        dbPool : vts.dbPool,
+      tilezCommons.query({
+        dbPool : tilez.dbPool,
         commons : commons,
         logger : commons.logger,
         sqls : [ util.format("SELECT ST_AsGeoJson(ST_Extent(%s),4, 1) AS bbox "
@@ -372,7 +372,7 @@ exports.startServer = function(commons, callback) {
         try {
           var bbox = JSON.parse(results[0].rows[0].bbox).bbox;
         } catch (parserErr) {
-          return vts.swagger.stopWithError(res, {
+          return tilez.swagger.stopWithError(res, {
             code : 400,
             message : "error getting extent for layer: " + req.params.layer
                 + ": " + JSON.stringify(parserErr)
@@ -390,7 +390,7 @@ exports.startServer = function(commons, callback) {
         for (z = min; z <= max; z++) {
 
           // Computes tiles x and y
-          tileExt = vtsCommons.bbox2tile(z, bbox);
+          tileExt = tilezCommons.bbox2tile(z, bbox);
           minX = Math.min(tileExt[0][1], tileExt[1][1]);
           maxX = Math.max(tileExt[0][1], tileExt[1][1]);
           minY = Math.min(tileExt[0][2], tileExt[1][2]);
@@ -414,20 +414,20 @@ exports.startServer = function(commons, callback) {
 
           // Generates tile and save it to the cache
           // TDOD: it must take format from args.format
-          vtsCommons.generateAndSaveTile({
+          tilezCommons.generateAndSaveTile({
             layer : req.params.layer,
             tile : tiles.keys[Number(k)],
-            dbPool : vts.dbPool,
-            cache : vts.cacheDb,
+            dbPool : tilez.dbPool,
+            cache : tilez.cacheDb,
             format : format,
-            genConfig : vts.genConfig,
+            genConfig : tilez.genConfig,
             commons : commons
           }, function(errGen, jsonTile) {
 
             // If error, warns and exits
             if (errGen) {
               commons.logger.error(errGen);
-              return vts.swagger.stopWithError(res, {
+              return tilez.swagger.stopWithError(res, {
                 code : 500,
                 message : JSON.stringify(errGen),
                 reason : 'could not generate or store tile'
@@ -453,7 +453,7 @@ exports.startServer = function(commons, callback) {
     }
   };
 
-  vts.clearCache = {
+  tilez.clearCache = {
     "spec" : {
       "description" : "",
       "path" : "/layers/{layer}",
@@ -469,14 +469,14 @@ exports.startServer = function(commons, callback) {
       commons.logRequest(req);
 
       // Collects information about given layer's tile
-      vts.cacheDb.view("vts", "tilesize", {
+      tilez.cacheDb.view("tilez", "tilesize", {
         reduce : false,
         start_key : JSON.stringify([ req.params.layer, null, null, null ]),
         end_key : JSON.stringify([ req.params.layer, {}, {}, {} ]),
       }, function(err, rows, headers) {
         if (err) {
           commons.logger.error(err);
-          return vts.swagger.stopWithError(res, {
+          return tilez.swagger.stopWithError(res, {
             code : 500,
             message : err.message,
             reason : 'cound not find tile'
@@ -496,12 +496,12 @@ exports.startServer = function(commons, callback) {
         });
 
         // Delete documents
-        vts.cacheDb.bulk(bulkDoc, {
+        tilez.cacheDb.bulk(bulkDoc, {
           method : "post"
         }, function(err, delDoc) {
           if (err) {
             commons.logger.error(err);
-            return vts.swagger.stopWithError(res, {
+            return tilez.swagger.stopWithError(res, {
               code : 500,
               message : err.message,
               reason : 'could not delete tiles'
@@ -526,30 +526,30 @@ exports.startServer = function(commons, callback) {
   app.use("/swagger", express.static(__dirname + "/../swagger"));
 
   // Registers configurations Swagger
-  vts.swagger.setAppHandler(app);
-  vts.swagger.addModels(vts.models);
+  tilez.swagger.setAppHandler(app);
+  tilez.swagger.addModels(tilez.models);
 
   // Registers API in Swagger
-  vts.swagger.addGet(vts.getTile)
-  vts.swagger.addPost(vts.seedCache)
-  vts.swagger.addDelete(vts.clearCache)
-  vts.swagger.addGet(vts.getLayers)
-  vts.swagger.configure(null, commons.getProperty("version"));
-  vts.swagger.configureSwaggerPaths("", "", "json");
+  tilez.swagger.addGet(tilez.getTile)
+  tilez.swagger.addPost(tilez.seedCache)
+  tilez.swagger.addDelete(tilez.clearCache)
+  tilez.swagger.addGet(tilez.getLayers)
+  tilez.swagger.configure(null, commons.getProperty("version"));
+  tilez.swagger.configureSwaggerPaths("", "", "json");
 
   /*
    * Starts listening to incoming requests
    */
-  app.listen(commons.getProperty("aurin.vts.port"));
+  app.listen(commons.getProperty("aurin.tilez.port"));
   commons.logger
       .info(
-          "VTS service version %s , running at PID %s , listening on http://localhost:%d "
+          "tilez service version %s , running at PID %s , listening on http://localhost:%d "
               + ", using PostgreSQL database %s on %s at %d and "
               + "CouchDB database %s on: %s at %s as back-end", commons
               .getProperty("version"), process.pid, commons
-              .getProperty("aurin.vts.port"), commons.getProperty("db.name"),
+              .getProperty("aurin.tilez.port"), commons.getProperty("db.name"),
           commons.getProperty("db.host"), commons.getProperty("db.port"),
-          commons.getProperty("couchdb.vts.db"), commons
+          commons.getProperty("couchdb.tilez.db"), commons
               .getProperty("couchdb.host"), commons.getProperty("couchdb.port"));
 
   callback(commons, app);

@@ -1,7 +1,7 @@
 /**
  * app.js
  *
- * Runner of vector-tile-service service
+ * Runner of tilez service
  */
 /**
  * Copyright 2011-2014 The AURIN Project
@@ -24,11 +24,11 @@ var commons = require("nodejs-commons")
 
 // Loads properties files
 var propDir = (process.env.AURIN_DIR) ? process.env.AURIN_DIR : ".";
-var propFile = path.join(propDir, "/vector-tile-server-combined.properties");
+var propFile = path.join(propDir, "/tilez-combined.properties");
 
 // Starts server
-var server = commons.startCluster(propFile, "vts", function(commons, callback) {
-  require("./src/vts.js").startServer(commons, function(commons, app) {
+var server = commons.startCluster(propFile, "tilez", function(commons, callback) {
+  require("./src/tilez.js").startServer(commons, function(commons, app) {
     callback(commons, app);
   });
 });

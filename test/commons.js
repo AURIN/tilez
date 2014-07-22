@@ -21,7 +21,7 @@ var fs = require("fs");
 var options = null;
 var commons = null;
 var apiProcess = null;
-var vts = null;
+var tilez = null;
 var http = null;
 var nano = null;
 var pg = null;
@@ -34,20 +34,20 @@ var createsDB = function(deleteErr, args, callback) {
     return;
   }
 
-  args.nano.db.create(args.commons.getProperty("couchdb.vts.db"),
+  args.nano.db.create(args.commons.getProperty("couchdb.tilez.db"),
       function(err) {
         if (err) {
           args.commons.logger.debug("Error: %s ", JSON.stringify(err));
           return;
         }
-        args.db = args.nano.use(args.commons.getProperty("couchdb.vts.db"));
-        args.dbPool = args.vts.dbPool;
+        args.db = args.nano.use(args.commons.getProperty("couchdb.tilez.db"));
+        args.dbPool = args.tilez.dbPool;
         var exec = require("child_process").exec;
         var dbUrl = args.commons.getProperty("couchdb.protocol") + "://"
             + args.commons.getProperty("couchdb.host") + ":"
             + args.commons.getProperty("couchdb.port") + "/"
-            + args.commons.getProperty("couchdb.vts.db");
-        var child = exec("couchapp push ./lib/couchdb/vts " + dbUrl, function(
+            + args.commons.getProperty("couchdb.tilez.db");
+        var child = exec("couchapp push ./lib/couchdb/tilez " + dbUrl, function(
             err, stdout, stderr) {
           if (err !== null) {
             console.log("XXX Error during views installation " + err);
@@ -69,28 +69,29 @@ var createsDB = function(deleteErr, args, callback) {
 exports.initTests = function(options, callback) {
 
   var propDir = (process.env.AURIN_DIR) ? process.env.AURIN_DIR : ".";
-  var propFile = require("path").join(propDir,
-      "/vector-tile-server-combined.properties");
-
+  var propFile = require("path").join(propDir, "/tilez-combined.properties");
+  console.log("------------------------------------------------------------");
+console.log(propFile); // XXX
+console.log("------------------------------------------------------------");
   var startProcess = function() {
 
     // If requested, starts the API process
     if (options.startProcessFlag) {
       if (options.startMockProcessFlag) {
-        args.commons.setProperty("aurin.vts.config", require("path").join(
+        args.commons.setProperty("aurin.tilez.config", require("path").join(
             "test", "testdata.js"));
-        args.vts.startServer(args.commons, function(commons, app) {
-          args.vts.nano.setTestData(args.testData.nano);
-          args.vts.dbPool.pg.setTestData(args.testData.pg);
-          args.dbPool = args.vts.dbPool;
-          args.nano = args.vts.nano;
-          args.vts.setConfigDefaults(args.testData);
+        args.tilez.startServer(args.commons, function(commons, app) {
+          args.tilez.nano.setTestData(args.testData.nano);
+          args.tilez.dbPool.pg.setTestData(args.testData.pg);
+          args.dbPool = args.tilez.dbPool;
+          args.nano = args.tilez.nano;
+          args.tilez.setConfigDefaults(args.testData);
           args.callback(args);
         });
       } else {
-        args.vts.startServer(args.commons, function(commons, app) {
-          args.dbPool = args.vts.dbPool;
-          args.nano = args.vts.nano;
+        args.tilez.startServer(args.commons, function(commons, app) {
+          args.dbPool = args.tilez.dbPool;
+          args.nano = args.tilez.nano;
           args.callback(args);
         });
       }
@@ -102,18 +103,18 @@ exports.initTests = function(options, callback) {
       function(obj) {
         args.commons = obj;
         args.options = {
-          host : args.commons.getProperty("aurin.vts.host"),
-          vtsprotocol : args.commons.getProperty("aurin.vts.protocol"),
-          port : args.commons.getProperty("aurin.vts.port"),
-          vtsPath : "",
-          vtsExternalPath : args.commons.getProperty("aurin.vts.path")
+          host : args.commons.getProperty("aurin.tilez.host"),
+          tilezprotocol : args.commons.getProperty("aurin.tilez.protocol"),
+          port : args.commons.getProperty("aurin.tilez.port"),
+          tilezPath : "",
+          tilezExternalPath : args.commons.getProperty("aurin.tilez.path")
         };
-        args.http = require(args.options.vtsprotocol);
+        args.http = require(args.options.tilezprotocol);
         args.callback = callback;
 
         // Injects the test database into the properties
-        args.commons.setProperty("couchdb.vts.db", args.commons
-            .getProperty("couchdb.test.vts.db"));
+        args.commons.setProperty("couchdb.tilez.db", args.commons
+            .getProperty("couchdb.test.tilez.db"));
 
         // Loads test data
         args.testData = require("../test/testdata.js");
@@ -121,13 +122,13 @@ exports.initTests = function(options, callback) {
         // If requested, sets the mock API process
         if (options.startMockProcessFlag) {
 
-          // Injects a mock Nano object into vts
+          // Injects a mock Nano object into tilez
           var sandboxed = require("sandboxed-module");
           args.nano = require("nano-mock");
           args.pg = require("pg-mock");
 
           require("sandboxed-module");
-          args.vts = sandboxed.require("../src/vts.js", {
+          args.tilez = sandboxed.require("../src/tilez.js", {
             requires : {
               nano : require("nano-mock"),
               pg : require("pg-mock")
@@ -142,15 +143,15 @@ exports.initTests = function(options, callback) {
                     + args.commons.getProperty("couchdb.host") + ":"
                     + args.commons.getProperty("couchdb.port")
               });
-          args.vts = require("../src/vts.js");
+          args.tilez = require("../src/tilez.js");
         }
 
         // If requested, Creates a test database
         if (options.createDBFlag) {
 
           // If test database exists, drops it before creating it and starting
-          // the vts
-          args.nano.db.destroy(args.commons.getProperty("couchdb.test.vts.db"),
+          // the tilez
+          args.nano.db.destroy(args.commons.getProperty("couchdb.test.tilez.db"),
               function(err) {
                 createsDB(err, args, startProcess);
               });
@@ -172,7 +173,7 @@ exports.shutdownTests = function(options, callback) {
     options.apiProcess.kill("SIGHUP");
   }
   if (options.dropDBFlag) {
-    args.nano.db.destroy(args.commons.getProperty("couchdb.vts.db"), callback);
+    args.nano.db.destroy(args.commons.getProperty("couchdb.tilez.db"), callback);
   } else {
     callback();
   }

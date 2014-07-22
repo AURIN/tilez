@@ -11,7 +11,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>au.org.aurin</groupId>
-  <artifactId>vector-tile-server</artifactId>
+  <artifactId>tilez</artifactId>
   <version>0.3.4-SNAPSHOT</version>
 
   <properties>
@@ -249,16 +249,16 @@
               <target id="install-views" if="installViews">
                 <exec executable="couchapp" dir="." failonerror="true">
                   <arg value="push" />
-                  <arg value="./lib/couchdb/vts" />
+                  <arg value="./lib/couchdb/tilez" />
                   <!-- ${couchdb.username}:${couchdb.password}@ -->
                   <arg
-                    value="${couchdb.protocol}://${couchdb.host}:${couchdb.port}/${couchdb.vts.db}" />
+                    value="${couchdb.protocol}://${couchdb.host}:${couchdb.port}/${couchdb.tilez.db}" />
                 </exec>
                 <exec executable="curl" dir="." failonerror="true">
                   <arg value="-X" />
                   <arg value="GET" />
                   <arg
-                    value="${couchdb.protocol}://${couchdb.host}:${couchdb.port}/${couchdb.vts.db}/_design/vts/_view/tilesize" />
+                    value="${couchdb.protocol}://${couchdb.host}:${couchdb.port}/${couchdb.tilez.db}/_design/tilez/_view/tilesize" />
                 </exec>
               </target>
             </configuration>

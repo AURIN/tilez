@@ -19,11 +19,11 @@ var should = chai.should();
 var expect = chai.expect;
 var assert = chai.assert;
 var testData;
-var vtsCommons = require("../src/commons.js");
+var tilezCommons = require("../src/commons.js");
 var tc = require("./commons.js");
 var util = require("util");
 var options;
-var vts;
+var tilez;
 var commons;
 var apiProcess = null;
 var dbPool = null;
@@ -46,7 +46,7 @@ describe(
           options = args.options;
           commons = args.commons;
           apiProcess = args.apiProcess;
-          vts = args.vts;
+          tilez = args.tilez;
           dbPool = args.dbPool;
           http = args.http;
           testData = args.testData;
@@ -55,7 +55,7 @@ describe(
       });
 
       it("converts tile to URLs", function(done) {
-        expect(vtsCommons.tile2url({
+        expect(tilezCommons.tile2url({
           layer : "lga",
           z : 1,
           x : 2,
@@ -66,7 +66,7 @@ describe(
       });
 
       it("converts tile to Document ID", function(done) {
-        expect("lga-json-1-2-3").eql(vtsCommons.tile2docid({
+        expect("lga-json-1-2-3").eql(tilezCommons.tile2docid({
           layer : "lga",
           z : 1,
           x : 2,
@@ -78,92 +78,92 @@ describe(
 
       it("converts tiles to bbox #1", function(done) {
         var t = testData.transform[0];
-        expect(vtsCommons.tile2bbox(t.tileMin[0], t.tileMin[1], t.tileMin[2]))
+        expect(tilezCommons.tile2bbox(t.tileMin[0], t.tileMin[1], t.tileMin[2]))
             .eql(t.bbox);
         done();
       });
 
       it("converts tiles to bbox #2", function(done) {
         var t = testData.transform[1];
-        expect(vtsCommons.tile2bbox(t.tileMin[0], t.tileMin[1], t.tileMin[2]))
+        expect(tilezCommons.tile2bbox(t.tileMin[0], t.tileMin[1], t.tileMin[2]))
             .eql(t.bbox);
         done();
       });
 
       it("converts tiles to bbox #3", function(done) {
         var t = testData.transform[2];
-        expect(vtsCommons.tile2bbox(t.tileMin[0], t.tileMin[1], t.tileMin[2]))
+        expect(tilezCommons.tile2bbox(t.tileMin[0], t.tileMin[1], t.tileMin[2]))
             .eql(t.bbox);
         done();
       });
 
       it("converts tiles to bbox #4", function(done) {
         var t = testData.transform[3];
-        expect(vtsCommons.tile2bbox(t.tileMin[0], t.tileMin[1], t.tileMin[2]))
+        expect(tilezCommons.tile2bbox(t.tileMin[0], t.tileMin[1], t.tileMin[2]))
             .eql(t.bbox);
         done();
       });
 
       it("converts tiles to bbox #5", function(done) {
         var t = testData.transform[4];
-        expect(vtsCommons.tile2bbox(t.tileMin[0], t.tileMin[1], t.tileMin[2]))
+        expect(tilezCommons.tile2bbox(t.tileMin[0], t.tileMin[1], t.tileMin[2]))
             .eql(t.bbox);
         done();
       });
 
       it("converts bbox to tiles #1", function(done) {
         var t = testData.transform[0];
-        expect(vtsCommons.bbox2tile(t.tileMin[0], t.bbox)).eql(
+        expect(tilezCommons.bbox2tile(t.tileMin[0], t.bbox)).eql(
             [ t.tileMin, t.tileMax ]);
         done();
       });
 
       it("converts bbox to tiles #2", function(done) {
         var t = testData.transform[1];
-        expect(vtsCommons.bbox2tile(t.tileMin[0], t.bbox)).eql(
+        expect(tilezCommons.bbox2tile(t.tileMin[0], t.bbox)).eql(
             [ t.tileMin2, t.tileMax2 ]);
         done();
       });
 
       it("converts bbox to tiles #3", function(done) {
         var t = testData.transform[2];
-        expect(vtsCommons.bbox2tile(t.tileMin[0], t.bbox)).eql(
+        expect(tilezCommons.bbox2tile(t.tileMin[0], t.bbox)).eql(
             [ t.tileMin2, t.tileMax2 ]);
         done();
       });
 
       it("converts bbox to tiles #4", function(done) {
         var t = testData.transform[3];
-        expect(vtsCommons.bbox2tile(t.tileMin[0], t.bbox)).eql(
+        expect(tilezCommons.bbox2tile(t.tileMin[0], t.bbox)).eql(
             [ t.tileMin2, t.tileMax2 ]);
         done();
       });
 
       it("converts bbox to tiles #5", function(done) {
         var t = testData.transform[4];
-        expect(vtsCommons.bbox2tile(t.tileMin[0], t.bbox)).eql(
+        expect(tilezCommons.bbox2tile(t.tileMin[0], t.bbox)).eql(
             [ t.tileMin2, t.tileMax2 ]);
         done();
       });
 
       it("intersects tile with bbox", function(done) {
         var t = testData.transform[0];
-        var tileBbox = vtsCommons.tile2bbox(t.tileMin[0], t.tileMin[1],
+        var tileBbox = tilezCommons.tile2bbox(t.tileMin[0], t.tileMin[1],
             t.tileMin[2]);
-        expect(true).eql(vtsCommons.isTileInBbox({
+        expect(true).eql(tilezCommons.isTileInBbox({
           z : t.tileMin[0],
           x : t.tileMin[1],
           y : t.tileMin[2],
           bbox : tileBbox
         }));
-        expect(true).eql(vtsCommons.isTileInBbox({
+        expect(true).eql(tilezCommons.isTileInBbox({
           z : t.tileMin[0],
           x : t.tileMin[1],
           y : t.tileMin[2],
           bbox : [ 0, 0, 1, 1 ]
         }));
         expect(true).eql(
-            vtsCommons.isTileInBbox({
+            tilezCommons.isTileInBbox({
               z : t.tileMin[0],
               x : t.tileMin[1],
               y : t.tileMin[2],
@@ -171,14 +171,14 @@ describe(
                   tileBbox[3] + 10 ]
             }));
         expect(true).eql(
-            vtsCommons.isTileInBbox({
+            tilezCommons.isTileInBbox({
               z : t.tileMin[0],
               x : t.tileMin[1],
               y : t.tileMin[2],
               bbox : [ tileBbox[0] - 10, tileBbox[1] - 10, tileBbox[2] - 10,
                   tileBbox[3] - 10 ]
             }));
-        expect(false).eql(vtsCommons.isTileInBbox({
+        expect(false).eql(tilezCommons.isTileInBbox({
           z : t.tileMin[0],
           x : t.tileMin[1],
           y : t.tileMin[2],
@@ -188,7 +188,7 @@ describe(
       });
 
       it("selects the right entry in query configuration #1", function(done) {
-        expect(vtsCommons.getQueryEntry("lga", 1, testData)).eql({
+        expect(tilezCommons.getQueryEntry("lga", 1, testData)).eql({
           query : testData.layers.lga.queries["1-4"],
           general : testData.layers.lga.general
         });
@@ -196,7 +196,7 @@ describe(
       });
 
       it("selects the right entry in query configuration #2", function(done) {
-        expect(vtsCommons.getQueryEntry("lga", 17, testData)).eql({
+        expect(tilezCommons.getQueryEntry("lga", 17, testData)).eql({
           query : testData.layers.lga.queries["17-17"],
           general : testData.layers.lga.general
         });
@@ -204,7 +204,7 @@ describe(
       });
 
       it("selects the right entry in query configuration #3", function(done) {
-        expect(vtsCommons.getQueryEntry("lga", 0, testData)).eql({
+        expect(tilezCommons.getQueryEntry("lga", 0, testData)).eql({
           query : testData.layers.lga.queries["0-0"],
           general : testData.layers.lga.general
         });
@@ -212,7 +212,7 @@ describe(
       });
 
       it("selects the right entry in query configuration #4", function(done) {
-        expect(vtsCommons.getQueryEntry("lga", 4, testData)).eql({
+        expect(tilezCommons.getQueryEntry("lga", 4, testData)).eql({
           query : testData.layers.lga.queries["1-4"],
           general : testData.layers.lga.general
         });
@@ -221,7 +221,7 @@ describe(
 
       it("selects the right entry in query configuration #5 (zoom as String)",
           function(done) {
-            expect(vtsCommons.getQueryEntry("lga", "4", testData)).eql({
+            expect(tilezCommons.getQueryEntry("lga", "4", testData)).eql({
               query : testData.layers.lga.queries["1-4"],
               general : testData.layers.lga.general
             });
@@ -230,7 +230,7 @@ describe(
 
       it("selects the right entry in query configuration #6 (zoom too small)",
           function(done) {
-            expect(vtsCommons.getQueryEntry("lga", -9, testData)).eql({
+            expect(tilezCommons.getQueryEntry("lga", -9, testData)).eql({
               query : testData.layers.lga.queries["0-0"],
               general : testData.layers.lga.general
             });
@@ -239,7 +239,7 @@ describe(
 
       it("selects the right entry in query configuration #7 (zoom too large)",
           function(done) {
-            expect(vtsCommons.getQueryEntry("lga", 27, testData)).eql({
+            expect(tilezCommons.getQueryEntry("lga", 27, testData)).eql({
               query : testData.layers.lga.queries["17-17"],
               general : testData.layers.lga.general
             });
@@ -251,36 +251,36 @@ describe(
           function(done) {
             expect({
               general : testData.layers.lga.general
-            }).eql(vtsCommons.getQueryEntry("lga", 9, testData));
+            }).eql(tilezCommons.getQueryEntry("lga", 9, testData));
             done();
           });
 
       it(
           "returns null when a non-existing layer is requested in query configuration",
           function(done) {
-            expect(vtsCommons.getQueryEntry("xxx", 4, testData)).eql(
+            expect(tilezCommons.getQueryEntry("xxx", 4, testData)).eql(
                 null);
             done();
           });
 
       it("returns null when a query configuration is empty", function(done) {
-        expect(vtsCommons.getQueryEntry("lga", 4, {})).eql(null);
+        expect(tilezCommons.getQueryEntry("lga", 4, {})).eql(null);
         done();
       });
 
       it("checkFormat should behave", function(done) {
-        expect(vtsCommons.checkFormat({
+        expect(tilezCommons.checkFormat({
           params : {
             ext : "jsON"
           }
         })).equals("json");
-        expect(vtsCommons.checkFormat({
+        expect(tilezCommons.checkFormat({
           params : {
             ext : "ToPojsON"
           }
         })).equals("topojson");
         assert.throws(function() {
-          return vtsCommons.checkFormat({
+          return tilezCommons.checkFormat({
             params : {
               ext : "xxx"
             }
@@ -308,7 +308,7 @@ describe(
             var renderer = new renderers.renderers["json"];
             expect(renderer.composeSQL({
               bbox : [ 1, 2, 3, 4 ],
-              config : vtsCommons.getQueryEntry("street", 4, testData)
+              config : tilezCommons.getQueryEntry("street", 4, testData)
             })[0])
                 .eql(
                     "SELECT ST_AsGeoJSON(ST_Transform(ST_Intersection(the_geom, "
@@ -324,7 +324,7 @@ describe(
             var renderer = new renderers.renderers["json"];
             expect(renderer.composeSQL({
               bbox : [ 1, 2, 3, 4 ],
-              config : vtsCommons.getQueryEntry("lga", 27, testData)
+              config : tilezCommons.getQueryEntry("lga", 27, testData)
             })[0])
                 .eql(
                     "SELECT ST_AsGeoJSON(ST_Transform(ST_Intersection(the_geom, "
@@ -340,7 +340,7 @@ describe(
             var renderer = new renderers.renderers["json"];
             expect(renderer.composeSQL({
               bbox : [ 1, 2, 3, 4 ],
-              config : vtsCommons.getQueryEntry("lga", 1, testData)
+              config : tilezCommons.getQueryEntry("lga", 1, testData)
             })[0])
                 .eql(
                     "SELECT ST_AsGeoJSON(ST_Transform(ST_Intersection(the_geom, "
@@ -356,7 +356,7 @@ describe(
             var renderer = new renderers.renderers["json"];
             expect(renderer.composeSQL({
               bbox : [ 1, 2, 3, 4 ],
-              config : vtsCommons.getQueryEntry("lga", 0, testData)
+              config : tilezCommons.getQueryEntry("lga", 0, testData)
             })[0])
                 .eql(
                     "SELECT ST_AsGeoJSON(ST_Transform(ST_Intersection(the_geom, "
@@ -373,7 +373,7 @@ describe(
             expect(
                 renderer.composeSQL({
                   bbox : [ 1, 2, 3, 4 ],
-                  config : vtsCommons.getQueryEntry("xxxstreet", 0,
+                  config : tilezCommons.getQueryEntry("xxxstreet", 0,
                       testData)
                 })[0])
                 .eql(
@@ -385,8 +385,8 @@ describe(
           });
 
       it("looks up and returns a cached tile", function(done) {
-        vtsCommons.lookUpTile({
-          cache : vts.cacheDb,
+        tilezCommons.lookUpTile({
+          cache : tilez.cacheDb,
           layer : "street",
           z : 1,
           x : 2,
@@ -400,8 +400,8 @@ describe(
       });
 
       it("returns 404 for a missing layer", function(done) {
-        vtsCommons.lookUpTile({
-          cache : vts.cacheDb,
+        tilezCommons.lookUpTile({
+          cache : tilez.cacheDb,
           layer : "xxx",
           z : 1,
           x : 2,
@@ -413,8 +413,8 @@ describe(
       });
 
       it("returns 404 for a missing tile", function(done) {
-        vtsCommons.lookUpTile({
-          cache : vts.cacheDb,
+        tilezCommons.lookUpTile({
+          cache : tilez.cacheDb,
           layer : "street",
           z : 999,
           x : 2,
@@ -426,8 +426,8 @@ describe(
       });
 
       it("simulates a CouchDB read error", function(done) {
-        vtsCommons.lookUpTile({
-          cache : vts.cacheDb,
+        tilezCommons.lookUpTile({
+          cache : tilez.cacheDb,
           layer : "street",
           z : 1,
           x : 2,
@@ -440,8 +440,8 @@ describe(
       });
 
       it("seeds the cache with a tile", function(done) {
-        vtsCommons.saveTileInCache({
-          cache : vts.cacheDb,
+        tilezCommons.saveTileInCache({
+          cache : tilez.cacheDb,
           layer : "street",
           z : 1,
           x : 2,
@@ -455,8 +455,8 @@ describe(
       });
 
       it("seeds the cache with a corrupted tile", function(done) {
-        vtsCommons.saveTileInCache({
-          cache : vts.cacheDb,
+        tilezCommons.saveTileInCache({
+          cache : tilez.cacheDb,
           layer : "street",
           z : 1,
           x : 2,
@@ -470,8 +470,8 @@ describe(
       });
 
       it("simulates a CouchDB write error", function(done) {
-        vtsCommons.saveTileInCache({
-          cache : vts.cacheDb,
+        tilezCommons.saveTileInCache({
+          cache : tilez.cacheDb,
           layer : "street",
           z : 1,
           x : 2,
@@ -485,8 +485,8 @@ describe(
       });
 
       it("generates a json street tile", function(done) {
-        vtsCommons.generateTile({
-          bbox : vtsCommons.tile2bbox(1, 2, 3),
+        tilezCommons.generateTile({
+          bbox : tilezCommons.tile2bbox(1, 2, 3),
           zoom : 1,
           dbPool : dbPool,
           genConfig : testData,
@@ -501,8 +501,8 @@ describe(
       });
 
       it("generates a json LGA tile", function(done) {
-        vtsCommons.generateTile({
-          bbox : vtsCommons.tile2bbox(1, 2, 3),
+        tilezCommons.generateTile({
+          bbox : tilezCommons.tile2bbox(1, 2, 3),
           zoom : 1,
           dbPool : dbPool,
           genConfig : testData,
@@ -517,8 +517,8 @@ describe(
       });
 
       it("handles a non-existing json tile", function(done) {
-        vtsCommons.generateTile({
-          bbox : vtsCommons.tile2bbox(1, 2, 888),
+        tilezCommons.generateTile({
+          bbox : tilezCommons.tile2bbox(1, 2, 888),
           zoom : 1,
           dbPool : dbPool,
           genConfig : testData,
@@ -533,8 +533,8 @@ describe(
       });
 
       it("generates a topojson LGA tile", function(done) {
-        vtsCommons.generateTile({
-          bbox : vtsCommons.tile2bbox(1, 2, 3),
+        tilezCommons.generateTile({
+          bbox : tilezCommons.tile2bbox(1, 2, 3),
           zoom : 1,
           dbPool : dbPool,
           genConfig : testData,
@@ -550,8 +550,8 @@ describe(
 
       // TODO should return an empty TopoJSON (testdata to be built yet)
       it("handles a non-existing topojson tile", function(done) {
-        vtsCommons.generateTile({
-          bbox : vtsCommons.tile2bbox(1, 2, 888),
+        tilezCommons.generateTile({
+          bbox : tilezCommons.tile2bbox(1, 2, 888),
           zoom : 1,
           dbPool : dbPool,
           genConfig : testData,
@@ -567,8 +567,8 @@ describe(
       });
 
       it("handles a non-existing layer", function(done) {
-        vtsCommons.generateTile({
-          bbox : vtsCommons.tile2bbox(1, 2, 3),
+        tilezCommons.generateTile({
+          bbox : tilezCommons.tile2bbox(1, 2, 3),
           zoom : 1,
           dbPool : dbPool,
           genConfig : testData,
@@ -585,8 +585,8 @@ describe(
 
       it("handles an undefined zoom level of an existing layer",
           function(done) {
-            vtsCommons.generateTile({
-              bbox : vtsCommons.tile2bbox(9, 2, 3),
+            tilezCommons.generateTile({
+              bbox : tilezCommons.tile2bbox(9, 2, 3),
               zoom : 9,
               dbPool : dbPool,
               genConfig : testData,
@@ -603,10 +603,10 @@ describe(
       it(
           "handles an SQL error when generating JSON",
           function(done) {
-            vtsCommons
+            tilezCommons
                 .generateTile(
                     {
-                      bbox : vtsCommons.tile2bbox(16, 59147, 40208),
+                      bbox : tilezCommons.tile2bbox(16, 59147, 40208),
                       zoom : 16,
                       dbPool : dbPool,
                       genConfig : testData,
@@ -625,7 +625,7 @@ describe(
           });
 
       it("warns when a missing format is requested", function(done) {
-        options.path = options.vtsPath + "/layers/street/1/2/4.";
+        options.path = options.tilezPath + "/layers/street/1/2/4.";
         options.method = "GET";
         options.headers = {};
         http.request(options, function(response) {
@@ -635,7 +635,7 @@ describe(
       });
 
       it("warns when a numeric format is requested", function(done) {
-        options.path = options.vtsPath + "/layers/street/1/2/4.123";
+        options.path = options.tilezPath + "/layers/street/1/2/4.123";
         options.method = "GET";
         options.headers = {};
         http.request(options, function(response) {
@@ -645,7 +645,7 @@ describe(
       });
 
       it("warns when an unknown format is requested", function(done) {
-        options.path = options.vtsPath + "/layers/street/1/2/4.shp";
+        options.path = options.tilezPath + "/layers/street/1/2/4.shp";
         options.method = "GET";
         options.headers = {};
         http.request(options, function(response) {
@@ -657,7 +657,7 @@ describe(
       it(
           "returns a tile in GeoJSON that does not exist in cache, but is legitimate (even with mixed-case)",
           function(done) {
-            options.path = options.vtsPath + "/layers/street/1/2/4.jSOn";
+            options.path = options.tilezPath + "/layers/street/1/2/4.jSOn";
             options.method = "GET";
             options.headers = {};
             http.request(
@@ -675,7 +675,7 @@ describe(
       it(
           "returns a tile in TopoJSON that does not exist in cache, but is legitimate (note extension with mixed-case)",
           function(done) {
-            options.path = options.vtsPath + "/layers/lga/1/2/4.toPOjsON";
+            options.path = options.tilezPath + "/layers/lga/1/2/4.toPOjsON";
             options.method = "GET";
             options.headers = {};
             http.request(
@@ -692,7 +692,7 @@ describe(
 
       it("returns an error for a non-existing layer ReST request", function(
           done) {
-        options.path = options.vtsPath + "/layers/xxx/1/2/3.json";
+        options.path = options.tilezPath + "/layers/xxx/1/2/3.json";
         options.method = "GET";
         options.headers = {};
         http.request(options, function(response) {
@@ -705,7 +705,7 @@ describe(
       });
 
       it("returns a tile via a ReST request", function(done) {
-        options.path = options.vtsPath + "/layers/street/1/2/3.json";
+        options.path = options.tilezPath + "/layers/street/1/2/3.json";
         options.method = "GET";
         options.headers = {};
         http.request(
@@ -721,7 +721,7 @@ describe(
       });
 
       it("seeds a layer with incorrect request #1", function(done) {
-        options.path = options.vtsPath + "/layers/street";
+        options.path = options.tilezPath + "/layers/street";
         options.method = "POST";
         options.headers = {};
         http.request(options, function(response) {
@@ -731,7 +731,7 @@ describe(
       });
 
       it("seeds a layer with incorrect request #2", function(done) {
-        options.path = options.vtsPath + "/layers/street.json?min=1";
+        options.path = options.tilezPath + "/layers/street.json?min=1";
         options.method = "POST";
         options.headers = {};
         http.request(options, function(response) {
@@ -741,7 +741,7 @@ describe(
       });
 
       it("seeds a layer with incorrect request #3", function(done) {
-        options.path = options.vtsPath + "/layers/street.json?max=1";
+        options.path = options.tilezPath + "/layers/street.json?max=1";
         options.method = "POST";
         options.headers = {};
         http.request(options, function(response) {
@@ -751,7 +751,7 @@ describe(
       });
 
       it("seeds a layer with incorrect request #4", function(done) {
-        options.path = options.vtsPath + "/layers/xxx.json?min=1&max=3";
+        options.path = options.tilezPath + "/layers/xxx.json?min=1&max=3";
         options.method = "POST";
         options.headers = {};
         http.request(options, function(response) {
@@ -761,7 +761,7 @@ describe(
       });
 
       it("seeds a layer with incorrect request #5", function(done) {
-        options.path = options.vtsPath + "/layers/xxx.topojson?min=1&max=3";
+        options.path = options.tilezPath + "/layers/xxx.topojson?min=1&max=3";
         options.method = "POST";
         options.headers = {};
         http.request(options, function(response) {
@@ -771,7 +771,7 @@ describe(
       });
 
       it("seeds a layer with incorrect request #6", function(done) {
-        options.path = options.vtsPath + "/layers/street.xxx?min=1&max=3";
+        options.path = options.tilezPath + "/layers/street.xxx?min=1&max=3";
         options.method = "POST";
         options.headers = {};
         http.request(options, function(response) {
@@ -781,7 +781,7 @@ describe(
       });
 
       it("returns the cache headers", function(done) {
-        options.path = options.vtsPath + "/layers/street/1/2/3.json";
+        options.path = options.tilezPath + "/layers/street/1/2/3.json";
         options.method = "GET";
         options.headers = {};
         http.request(options, function(response) {

@@ -142,7 +142,7 @@ commons.generateTile = function(args, callback) {
 
   // Sets a skeleton output, depending on the format
   var renderer = new renderers.renderers[args.format](args.commons
-      .getProperty("aurin.vts.topology.quantization"));
+      .getProperty("aurin.tilez.topology.quantization"));
   renderer.setCRS(layerConfig.general.displayProj);
 
   // If the given zoom level does not have a corresponding query in the
