@@ -70,9 +70,6 @@ exports.initTests = function(options, callback) {
 
   var propDir = (process.env.AURIN_DIR) ? process.env.AURIN_DIR : ".";
   var propFile = require("path").join(propDir, "/tilez-combined.properties");
-  console.log("------------------------------------------------------------");
-console.log(propFile); // XXX
-console.log("------------------------------------------------------------");
   var startProcess = function() {
 
     // If requested, starts the API process

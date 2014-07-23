@@ -12,7 +12,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>au.org.aurin</groupId>
   <artifactId>tilez</artifactId>
-  <version>0.3.4-SNAPSHOT</version>
+  <version>0.3.4</version>
 
   <properties>
     <version>${project.version}</version>
@@ -36,7 +36,7 @@
     <istanbulVersion>0.1.37</istanbulVersion>
     <mochaistVersion>0.2.0</mochaistVersion>
     <topojsonVersion>1.6.0</topojsonVersion>
-    <nodejscommonsVersion>git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.4.5-SNAPSHOT</nodejscommonsVersion>
+    <nodejscommonsVersion>git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.4.5</nodejscommonsVersion>
     <expressVersion>2.5.x</expressVersion>
     <sandboxedVersion>0.2.0</sandboxedVersion>
     <swaggerVersion>git+ssh://git@github.com:AURIN/swagger-node-express.git#aurin</swaggerVersion>

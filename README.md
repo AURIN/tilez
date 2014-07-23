@@ -41,6 +41,13 @@ https://github.com/AURIN/openlayers/tree/v2.13.2
 made by the Australian Bureau of Statistics); `psql -d tilez -h localhost -U postgres -f ./data/lga.sql`
 (the command line above can be tailored to suit a different user, host or file location).
 
+NOTE: Test data were obtained from the Australian Bureau of Statistics  website and are covered by
+the Creative Commons license (http://creativecommons.org/licenses/by/2.5/au/
+Copyright Commonwealth of Australia ).
+These data were then generalized to minimize their size using PostgreSQL and PostGIS. 
+ 
+
+
 ### Creation of Cache database
 
 * Create a CouchDB database named tilez: 
@@ -54,11 +61,11 @@ made by the Australian Bureau of Statistics); `psql -d tilez -h localhost -U pos
 
 * Change hosts, passwords, servers' addresses and ports to reflect your settngs
  
-### Start Tilez
+### How to start Tilez
 
 *  node app.js
 
-### Look at the API
+### A look at the API
 
 * Point your browser (possibly with Chrome) at: 
 `http://localhost:2005/swagger/index.html`
@@ -234,4 +241,9 @@ To test, just load the index.html page in your browser:
 
 * This module uses Swagger 1,2.3 internally (see lib/swagger)
 * Integration tests rely on tes data defined in config.json
+  
+  
+# License
+
+Apache License, Version 2.0, see the LICENSE file  
   
