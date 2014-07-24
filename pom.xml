@@ -12,7 +12,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>au.org.aurin</groupId>
   <artifactId>tilez</artifactId>
-  <version>0.3.4</version>
+  <version>0.3.5-SNAPSHOT</version>
 
   <properties>
     <version>${project.version}</version>
