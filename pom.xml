@@ -445,6 +445,9 @@
                       <source>
                           <location>app.js</location>
                       </source>
+                      <source>
+                          <location>package.json</location>
+                      </source>
                   </sources>
               </mapping>
               <mapping>
