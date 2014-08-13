@@ -286,7 +286,7 @@ exports.startServer = function(commons, callback) {
     "action" : function(req, res) {
       commons.logRequest(req);
 
-      tilez.cacheDb.listview("tilez", "layers", "tilesize", {
+      tilez.cacheDb.view_with_list("tilez", "tilesize", "layers", {
         group_level : 4
       }, function(err, docs, headers) {
         if (err) {

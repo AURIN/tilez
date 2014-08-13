@@ -15,7 +15,7 @@
   }],
   "main": "./app.js",
   "dependencies": {
-    "nodejs-commons": "git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.4.5",
+    "nodejs-commons": "git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.4.7",
     "express": "2.5.x",
     "util": "0.4.9",
     "swagger-node-express": "git+ssh://git@github.com:AURIN/swagger-node-express.git#aurin",
@@ -25,7 +25,7 @@
     "util": "0.4.9",
     "sax": "0.5.1",
     "pg": "2.2.0",
-    "nano": "git+ssh://git@github.com:AURIN/nano.git#aurin",
+    "nano": "git+ssh://git@github.com:AURIN/nano.git#v5.10.1-AURIN",
     "mocha": "git+ssh://git@github.com:AURIN/mocha.git",
     "chai": "1.5.0",
     "xunit-file": "0.0.5",
@@ -34,7 +34,7 @@
     "topojson" : "1.6.0"
   },
   "devDependencies": {
-    "nano-mock": "git+ssh://git@github.com:AURIN/nano-mock.git#v0.1.1",
+    "nano-mock": "git+ssh://git@github.com:AURIN/nano-mock.git#v0.1.5",
     "pg-mock": "git+ssh://git@github.com:AURIN/pg-mock.git#v0.2.4",
     "sandboxed-module": "0.2.0"
   },
