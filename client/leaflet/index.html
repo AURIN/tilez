@@ -62,38 +62,18 @@ path.polyInvisible {
       };
     };
 
-    /*
     var topoJsonURL = 'http://localhost:2005/layers/lga/{z}/{x}/{y}.topojson';
     var topoJsonLayer = new L.TileLayer.d3_topoJSON(topoJsonURL, {
       layerName : "vectile",
       class : "polyInvisible"
     }).addTo(map);
-*/
+
     // Adds a fake GeoJSON line to coerce Leaflet into creating the <svg> tag that d3_geoJson needs
     new L.geoJson({
       "type" : "LineString",
       "coordinates" : [ [ 0, 0 ], [ 0, 0 ] ]
     }).addTo(map);
-    var myLines = [{
-      "type": "LineString",
-      "coordinates": [[120, -30], [130, -15], [150, -5]]
-  }, {
-      "type": "LineString",
-      "coordinates": [[120, 0], [130, -15], [150, -35]]
-  }];
 
-  var myStyle = {
-      "color": "#ff7800",
-      "weight": 5,
-      "opacity": 0.65
-  };
-
-  var dohLayer= L.geoJson(myLines, {
-      style: myStyle
-  });
-  map.addLayer(dohLayer);
-
-  /*
     topoJsonLayer
         .on(
             "load",
@@ -123,15 +103,15 @@ path.polyInvisible {
                     if (!geom.isValid()) {
                       console.log("******* invalid geometry " + geom);
                     } else {
-                      tilePolygons[id].geometries.push(geom);
+                      // This avoids topology errors, at the price of some "holes" in the goemetry
+                      // where the offending geometry should be
+                      try {
+                        tilePolygons[id].geometries.push(geom.buffer(0));
+                      } catch (topoErr) {
+                        console.log("******* buffer error " + topoErr);
+                      }
                     }
 
-                    // FIXME: this avoids topology errors, at the price of some "holes" in the goemetry
-                    //try {
-                    //  tilePolygons[id].push(geom.buffer(0));
-                    //} catch (topoErr) {
-                    //  console.log("******* buffer error " + topoErr);
-                    //}
                   }
                 }
               }
@@ -174,7 +154,6 @@ path.polyInvisible {
                 }
               }
             });
-*/              
   </script>
 </body>
 </html>

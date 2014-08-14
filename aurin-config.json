@@ -95,6 +95,38 @@
     "lga" : {
       "general" : {
         "proj" : "EPSG:4283",
+        "displayProj" : "EPSG:4283",
+        "geomcol" : "wkb_geometry",
+        "schema" : "abs_asgc",
+        "pk" : "lga_code06",
+        "retColumns" : "lga_code06 as feature_code, lga_name06 as feature_name"
+      },
+      "queries" : {
+        "0-6" : {
+          "table" : "lga06gen0_05",
+          "addExpr" : ""
+        },
+        "7-8" : {
+          "table" : "lga06gen0_01",
+          "addExpr" : ""
+        },
+        "9-10" : {
+          "table" : "lga06gen0_005",
+          "addExpr" : ""
+        },
+        "11-12" : {
+          "table" : "lga06gen0_001",
+          "addExpr" : ""
+        },
+        "13-18" : {
+          "table" : "lga06aaust",
+          "addExpr" : ""
+        }
+      }
+    },
+    "lga2006" : {
+      "general" : {
+        "proj" : "EPSG:4283",
         "displayProj" : "EPSG:3857",
         "geomcol" : "wkb_geometry",
         "schema" : "abs_asgc",

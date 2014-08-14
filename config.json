@@ -3,7 +3,7 @@
     "lga" : {
       "general" : {
         "proj" : "EPSG:4283",
-        "displayProj" : "EPSG:3857",
+        "displayProj" : "EPSG:4283",
         "geomcol" : "wkb_geometry",
         "schema" : "public",
         "pk" : "lga_code06",
