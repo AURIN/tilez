@@ -101,7 +101,7 @@ an annotated example of this fiel follows:
         "street": { // This is the name of the layer
             "general": {
                 "proj": "EPSG:4326", // Native Coordinate Reference System of the layer (defaults to EPSG:4326)
-                "displayProj": "EPSG:3857", // CRS of the output tiles (defaults to EPSG:3957) 
+                "displayProj": "EPSG:3857", // CRS of the output tiles (defaults to EPSG:3957, Leaflet works only with geographic coordinate systems) 
                 "geomcol": "wkb_geometry", // Geometry column in the PostgreSQL table(s)
                 "schema": "psma", // Schema of table(s)
                 "pk": "ogc_fid" // Primary Key column
@@ -225,22 +225,21 @@ This message is harmless, and does not influence the tests.
  should return a JSON array with defined layers. 
   
 To test the integration between the client and the server, you may use clients
-built with different mapping frameworks (OpenLayers 2, Leaflet and OpenLayers3).
-
-The only full-featured client is the OL2 one, while the Leaflet one lacks the ability to choose different 
-layers and the OL3 one shows only tiled data (in time, all clients should have the same capabilitis). 
+built with Leaflet.
 
 To test, just load the index.html page in your browser:
-  `file:///+path_to_tilez_/vector-tile-server/client/ol2/index.html`
   `file:///+path_to_tilez_/vector-tile-server/client/leaflet/index.html`
-  `file:///+path_to_tilez_/vector-tile-server/client/ol3/index.html`
-...and start zooming and panning around.
+...and start zooming and panning around (click and mouse hover events supported as well).
+
 
 
 ## Notes
 
-* This module uses Swagger 1,2.3 internally (see lib/swagger)
-* Integration tests rely on tes data defined in config.json
+* This module uses Swagger 1,2.3 internally (see lib/swagger);
+* Integration tests rely on tes data defined in config.json;
+* The Leaflet client relies on an old implementation of it and on some experimental features.
+ (see https://github.com/glenrobertson/leaflet-tilelayer-geojson/ and
+  https://gist.github.com/NelsonMinar/5851197) to which Tilez is in debt.
   
   
 # License
