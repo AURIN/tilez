@@ -192,5 +192,5 @@ renderers.renderers = {
   topojson : TopoJsonRenderer
 };
 
-// Available formats as a comma-separated String
-renderers.formats = Object.getOwnPropertyNames(renderers.renderers).join(", ");
+// Available formats in an Array
+renderers.formats = Object.getOwnPropertyNames(renderers.renderers);

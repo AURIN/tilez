@@ -139,7 +139,8 @@ exports.startServer = function(commons, callback) {
           + " on " + JSON.stringify(client);
       process.exit(2);
     } else {
-      tilez.dbPool.pool = tilez.dbPool.pg.pools.getOrCreate(tilez.dbPool.config);
+      tilez.dbPool.pool = tilez.dbPool.pg.pools
+          .getOrCreate(tilez.dbPool.config);
       tilez.dbPool.pg.defaults.poolSize = commons
           .getProperty("aurin.tilez.pg.poolSize");
       done();
@@ -160,13 +161,15 @@ exports.startServer = function(commons, callback) {
       "description" : "",
       "path" : "/layers/{layer}/{z}/{x}/{y}\.:ext",
       "notes" : "",
-      "summary" : "Returns a GeoJSON representation of a tile of the given layer, supports formats: "
-          + tilezCommons.formats,
+      "summary" : "Returns a GeoJSON representation of a tile of the given layer",
       "method" : "GET",
-      "params" : [ swParam.path("layer", "ID of layer", "string"),
-          swParam.path("z", "zoom-level of tile", "string"),
-          swParam.path("x", "column of tile", "string"),
-          swParam.path("y", "row of tile", "string") ],
+      "params" : [
+          swParam.path("layer", "ID of layer", "string"),
+          swParam.path("z", "zoom-level of tile", "number"),
+          swParam.path("x", "column of tile", "number"),
+          swParam.path("y", "row of tile", "number"),
+          swParam.path("ext", "Tile format", "string", true,
+              tilezCommons.formats) ],
       "responseClass" : "string",
       "errorResponses" : [],
       "nickname" : "getTile"
@@ -206,11 +209,10 @@ exports.startServer = function(commons, callback) {
         // If an error other than 'missing tile' occurred during tile lookup,
         // aborts
         if (err && err["status-code"] !== 404) {
-          commons.logger.error(err);
+          commons.logger.info(err);
           return tilez.swagger.stopWithError(res, {
             code : 500,
-            message : JSON.stringify(err),
-            reason : 'unknown problem in tile lookup'
+            message : JSON.stringify(err)
           });
         }
 
@@ -223,8 +225,7 @@ exports.startServer = function(commons, callback) {
           commons.logger.error(errMessage);
           return tilez.swagger.stopWithError(res, {
             code : 500,
-            message : errMessage,
-            reason : 'undefined layer'
+            message : errMessage
           });
         }
 
@@ -253,8 +254,7 @@ exports.startServer = function(commons, callback) {
           if (errGen && !jsonTile) {
             return tilez.swagger.stopWithError(res, {
               code : 500,
-              message : JSON.stringify(errGen),
-              reason : 'could not generate tile'
+              message : JSON.stringify(errGen)
             });
           } else {
             return commons.setObjectResponse({
@@ -293,8 +293,7 @@ exports.startServer = function(commons, callback) {
           commons.logger.error(err);
           return tilez.swagger.stopWithError(res, {
             code : 500,
-            message : err.message,
-            reason : 'cannot list layers'
+            message : err.message
           });
         }
 
@@ -315,12 +314,14 @@ exports.startServer = function(commons, callback) {
       "path" : "/layers/{layer}\.:ext",
       "notes" : "",
       "summary" : "Pre-populates the cache with all the tile included within two zoom levels. "
-          + "Returns the number of tiles added. It supports formats: "
-          + tilezCommons.formats,
+          + "Returns the number of tiles added",
       "method" : "POST",
-      "params" : [ swParam.path("layer", "ID of layer", "string"),
+      "params" : [
+          swParam.path("layer", "ID of layer", "string"),
           swParam.query("min", "Minmum zoom for the seeding", "number", true),
-          swParam.query("max", "Maximum zoom for the seeding", "number", true) ],
+          swParam.query("max", "Maximum zoom for the seeding", "number", true),
+          swParam.path("ext", "Tile format", "string", true,
+              tilezCommons.formats) ],
       "responseClass" : "string",
       "errorResponses" : [],
       "nickname" : "seedCache"
@@ -341,8 +342,7 @@ exports.startServer = function(commons, callback) {
           || typeof req.query["max"] === "undefined") {
         return tilez.swagger.stopWithError(res, {
           code : 400,
-          message : "Missing min or max parameters",
-          reason : 'missing parameters'
+          message : "Missing min or max parameters"
         });
       }
       var min = Number(req.query["min"]);
@@ -356,8 +356,7 @@ exports.startServer = function(commons, callback) {
       if (layerConfig === null) {
         return tilez.swagger.stopWithError(res, {
           code : 400,
-          message : "query configuration not found for: " + req.params.layer,
-          reason : 'could not find query configuration'
+          message : "query configuration not found for: " + req.params.layer
         });
       }
 
@@ -429,8 +428,7 @@ exports.startServer = function(commons, callback) {
               commons.logger.error(errGen);
               return tilez.swagger.stopWithError(res, {
                 code : 500,
-                message : JSON.stringify(errGen),
-                reason : 'could not generate or store tile'
+                message : JSON.stringify(errGen)
               });
             }
 
@@ -478,8 +476,7 @@ exports.startServer = function(commons, callback) {
           commons.logger.error(err);
           return tilez.swagger.stopWithError(res, {
             code : 500,
-            message : err.message,
-            reason : 'cound not find tile'
+            message : err.message
           });
         }
 
@@ -503,8 +500,7 @@ exports.startServer = function(commons, callback) {
             commons.logger.error(err);
             return tilez.swagger.stopWithError(res, {
               code : 500,
-              message : err.message,
-              reason : 'could not delete tiles'
+              message : err.message
             });
           }
 
@@ -523,19 +519,15 @@ exports.startServer = function(commons, callback) {
   };
 
   // Adds API docs endpoint
-  app.use("/swagger", express.static(__dirname + "/../swagger"));
+//  app.use("/swagger", express.static(__dirname + "/../swagger"));
 
   // Registers configurations Swagger
   tilez.swagger.setAppHandler(app);
   tilez.swagger.addModels(tilez.models);
 
   // Registers API in Swagger
-  tilez.swagger.addGet(tilez.getTile)
-  tilez.swagger.addPost(tilez.seedCache)
-  tilez.swagger.addDelete(tilez.clearCache)
-  tilez.swagger.addGet(tilez.getLayers)
+  commons.injectEndpoints(tilez);
   tilez.swagger.configure(null, commons.getProperty("version"));
-  tilez.swagger.configureSwaggerPaths("", "", "json");
 
   /*
    * Starts listening to incoming requests

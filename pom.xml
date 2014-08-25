@@ -36,10 +36,10 @@
     <istanbulVersion>0.1.37</istanbulVersion>
     <mochaistVersion>0.2.0</mochaistVersion>
     <topojsonVersion>1.6.0</topojsonVersion>
-    <nodejscommonsVersion>git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.4.7</nodejscommonsVersion>
+    <nodejscommonsVersion>git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.4.9</nodejscommonsVersion>
     <expressVersion>2.5.x</expressVersion>
     <sandboxedVersion>0.2.0</sandboxedVersion>
-    <swaggerVersion>git+ssh://git@github.com:AURIN/swagger-node-express.git#aurin</swaggerVersion>
+    <swaggerVersion>2.1.0</swaggerVersion>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.sourceEncoding>UTF-8</project.reporting.sourceEncoding>

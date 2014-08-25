@@ -15,10 +15,10 @@
   }],
   "main": "./app.js",
   "dependencies": {
-    "nodejs-commons": "git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.4.7",
+    "nodejs-commons": "git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.4.9",
     "express": "2.5.x",
     "util": "0.4.9",
-    "swagger-node-express": "git+ssh://git@github.com:AURIN/swagger-node-express.git#aurin",
+    "swagger-node-express": "2.1.0",
     "futures": "2.3.1",
     "sequence": "2.2.1",
     "forEachAsync": "2.2.0",

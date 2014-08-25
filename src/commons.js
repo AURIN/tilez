@@ -42,8 +42,7 @@ commons.checkFormat = function(req) {
     throw {
       code : 400,
       message : util.format("Format %s unsupported, use: %s", format,
-          commons.formats),
-      reason : 'invalid format'
+          commons.formats)
     };
   }
 };
