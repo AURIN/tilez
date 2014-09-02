@@ -12,7 +12,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>au.org.aurin</groupId>
   <artifactId>tilez</artifactId>
-  <version>0.3.5-SNAPSHOT</version>
+  <version>0.3.5</version>
 
   <properties>
     <version>${project.version}</version>
@@ -26,7 +26,7 @@
     <pgVersion>2.2.0</pgVersion>
     <pgMockVersion>git+ssh://git@github.com:AURIN/pg-mock.git#v0.2.4</pgMockVersion>
     <nanoVersion>git+ssh://git@github.com:AURIN/nano.git#v5.10.1-AURIN</nanoVersion>
-    <nanomockVersion>git+ssh://git@github.com:AURIN/nano-mock.git#v0.1.5</nanomockVersion>
+    <nanomockVersion>git+ssh://git@github.com:AURIN/nano-mock.git#v0.1.6</nanomockVersion>
     <clarinetVersion>0.7.2</clarinetVersion>
     <saxVersion>0.5.1</saxVersion>
     <chaiVersion>1.5.0</chaiVersion>
@@ -36,7 +36,7 @@
     <istanbulVersion>0.1.37</istanbulVersion>
     <mochaistVersion>0.2.0</mochaistVersion>
     <topojsonVersion>1.6.0</topojsonVersion>
-    <nodejscommonsVersion>git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.4.9</nodejscommonsVersion>
+    <nodejscommonsVersion>git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.4.10</nodejscommonsVersion>
     <expressVersion>2.5.x</expressVersion>
     <sandboxedVersion>0.2.0</sandboxedVersion>
     <swaggerVersion>2.1.0</swaggerVersion>

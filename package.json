@@ -1,6 +1,6 @@
 {
   "name": "tilez",
-  "version": "0.3.5-SNAPSHOT",
+  "version": "0.3.5",
   "description": "Generation and serving of vector tiles",
   "private": true,
   "keywords": [ "aurin", "vector", "tile" ],
@@ -15,7 +15,7 @@
   }],
   "main": "./app.js",
   "dependencies": {
-    "nodejs-commons": "git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.4.9",
+    "nodejs-commons": "git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.4.10",
     "express": "2.5.x",
     "util": "0.4.9",
     "swagger-node-express": "2.1.0",
@@ -34,7 +34,7 @@
     "topojson" : "1.6.0"
   },
   "devDependencies": {
-    "nano-mock": "git+ssh://git@github.com:AURIN/nano-mock.git#v0.1.5",
+    "nano-mock": "git+ssh://git@github.com:AURIN/nano-mock.git#v0.1.6",
     "pg-mock": "git+ssh://git@github.com:AURIN/pg-mock.git#v0.2.4",
     "sandboxed-module": "0.2.0"
   },
@@ -42,7 +42,7 @@
   "engines": {
     "node": "v0.10.x"
   },
-  "_id": "au.org.aurin.tilez@0.3.5-SNAPSHOT",
+  "_id": "au.org.aurin.tilez@0.3.5",
   "optionalDependencies": {},
   "_engineSupported": true,
   "_npmVersion": ">=1.2.x",
