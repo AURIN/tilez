@@ -1,6 +1,6 @@
 {
   "name": "tilez",
-  "version": "0.3.6-SNAPSHOT",
+  "version": "0.3.6",
   "description": "Generation and serving of vector tiles",
   "private": true,
   "keywords": [ "aurin", "vector", "tile" ],
@@ -42,7 +42,7 @@
   "engines": {
     "node": "v0.10.x"
   },
-  "_id": "au.org.aurin.tilez@0.3.6-SNAPSHOT",
+  "_id": "au.org.aurin.tilez@0.3.6",
   "optionalDependencies": {},
   "_engineSupported": true,
   "_npmVersion": ">=1.2.x",
