@@ -5,7 +5,7 @@
         "proj" : "EPSG:4283",
         "displayProj" : "EPSG:4283",
         "geomcol" : "wkb_geometry",
-        "schema" : "public",
+        "schema" : "tilez",
         "pk" : "lga_code06",
         "retColumns" : "lga_code06 as feature_code, lga_name06 as feature_name"
       },

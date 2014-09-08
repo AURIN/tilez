@@ -26,17 +26,19 @@ https://github.com/AURIN/openlayers/tree/v2.13.2
 * To test Tilez, mocha 1.14.x should be installed (globally):
   `npm -g update mocha@1.14.0`
 
-  
+
 ## Installation
 
 ### Download a Tilez version, or clone the Tilez Git repository;
 
-### Move into the vector-tile-server directory
+### Move into the tilez directory
 
 ### Geo-spatial data loading
 
 * Login to the PostgreSQL server   
-* Create a database with PostGIS support: `createdb --template=template_postgis tilez`
+* Create a database with PostGIS support. If you have created a template, you can do this using: `createdb --template=template_postgis tilez`
+If you haven't created a template, you will need to consult the PostGIS
+documentation to find out how to do it on your platform. See `http://postgis.net/install/` for details.
 * Load geo-spatial data (included in Tilez there is a generalized version of Local Government Areas, 
 made by the Australian Bureau of Statistics); `psql -d tilez -h localhost -U postgres -f ./data/lga.sql`
 (the command line above can be tailored to suit a different user, host or file location).
@@ -56,8 +58,11 @@ These data were then generalized to minimize their size using PostgreSQL and Pos
 * Create the views of the CouchDB database (it is assumed CouchDB is answering at localhost:5984: 
 `cd lib/couchdb; couchapp push tilez http://localhost:5984/tilez; cd ../..`
 
+### Install node.js dependencies
 
-### Adapt the properties file vector-tile-server-combined.properties
+* `npm install`
+
+### Adapt the properties file `vector-tile-server-combined.properties`
 
 * Change hosts, passwords, servers' addresses and ports to reflect your settngs
  
@@ -152,7 +157,7 @@ and install Node.js dependencies:
   `mvn compile -Ddeployment={deployment type} -Dsystem={developmet system}`
 
 To set up the Tilez server:
-A database named "Tilez" has to be created on the CouchDB server. 
+A database named "tilez" has to be created on the CouchDB server. 
 
 To install CouchDB views and list functions (including a call to initialize the views):
   `mvn compile -DinstallViews=true -Ddeployment={deployment type} -Dsystem={system}`
@@ -168,7 +173,7 @@ Start `node-inspector` in another window and follow the instructions (it needs C
 ## Starting the server
 
 Starting the server:
-  
+
   `node ./app.js`
 
 
@@ -182,7 +187,7 @@ Unit testing (integration tests are carried out only within the AURIN project):
 
 Unit testing:
   `mvn integration-test -DunitTest=true -Ddeployment={deployment type} -Dsystem={system}`
-  
+
 After the properties file is made, the following -and quicker- command can be used: 
   `mocha --no-colors --grep t-unit`
 
@@ -207,12 +212,12 @@ This message is harmless, and does not influence the tests.
 1.  Prepare the combined properties file for the _target_ system:  
   `mvn compile -Ddeployment={deployment type} -Dsystem={target system},{target db server}`
 1.  Copy the combined properties file from the development machine to the target system under ${AURIN_DIR}
-1.  Create, if not existing, a "Tilez" database on CouchDB on the db server
+1.  Create, if not existing, a "tilez" database on CouchDB on the db server
 1.  Create views and other functions on the db2 server
   `mvn compile -DinstallViews=true -Ddeployment={deployment type} -Dsystem={target system},{target db server}` 
 1.  Open an SSH session on the target system
 1.  Install Tilez of the required version (see package.json) in your home directory in the server
-  `npm install git+ssh://git@github.com/AURIN/Tilez.git@<version of Tilez>`
+  `npm install git+ssh://git@github.com/AURIN/tilez.git@<version of tilez>`
 1.  Stop the service:
   `sudo service aurin-api-tilez stop`
 1.  Rename the old version's directory (if existing) on the target system to datastore.old 
@@ -223,14 +228,13 @@ This message is harmless, and does not influence the tests.
 1.  Test it:
  `curl -k -X GET "https://dev-api.aurin.org.au/tilez/layers"`
  should return a JSON array with defined layers. 
-  
+
 To test the integration between the client and the server, you may use clients
 built with Leaflet.
 
 To test, just load the index.html page in your browser:
   `file:///+path_to_tilez_/vector-tile-server/client/leaflet/index.html`
 ...and start zooming and panning around (click and mouse hover events supported as well).
-
 
 
 ## Notes
@@ -245,4 +249,4 @@ To test, just load the index.html page in your browser:
 # License
 
 Apache License, Version 2.0, see the LICENSE file  
-  
+

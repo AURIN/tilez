@@ -1,23 +1,18 @@
---
--- PostgreSQL database dump
---
-
 SET statement_timeout = 0;
 SET client_encoding = 'SQL_ASCII';
 SET standard_conforming_strings = on;
-SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 SET default_tablespace = '';
 
 SET default_with_oids = false;
 
---
--- Name: lga06gen0_05; Type: TABLE; Schema: public; Owner: luca; Tablespace: 
---
-DROP TABLE lga06gen0_05;
 
-CREATE TABLE lga06gen0_05 (
+CREATE SCHEMA IF NOT EXISTS tilez;
+
+DROP TABLE IF EXISTS tilez.lga06gen0_05 CASCADE;
+
+CREATE TABLE tilez.lga06gen0_05 (
     ogc_fid integer NOT NULL,
     wkb_geometry public.geometry,
     state_code character varying(1),
@@ -29,13 +24,7 @@ CREATE TABLE lga06gen0_05 (
 );
 
 
-ALTER TABLE lga06gen0_05 OWNER TO luca;
-
---
--- Name: lga06gen0_05_ogc_fid_seq; Type: SEQUENCE; Schema: abs_asgc; Owner: luca
---
-
-CREATE SEQUENCE lga06gen0_05_ogc_fid_seq
+CREATE SEQUENCE tilez.lga06gen0_05_ogc_fid_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -43,27 +32,16 @@ CREATE SEQUENCE lga06gen0_05_ogc_fid_seq
     CACHE 1;
 
 
-ALTER TABLE lga06gen0_05_ogc_fid_seq OWNER TO luca;
-
---
--- Name: lga06gen0_05_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: abs_asgc; Owner: luca
---
-
-ALTER SEQUENCE lga06gen0_05_ogc_fid_seq OWNED BY lga06gen0_05.ogc_fid;
+ALTER SEQUENCE tilez.lga06gen0_05_ogc_fid_seq
+    OWNED BY tilez.lga06gen0_05.ogc_fid;
 
 
---
--- Name: ogc_fid; Type: DEFAULT; Schema: abs_asgc; Owner: luca
---
-
-ALTER TABLE ONLY lga06gen0_05 ALTER COLUMN ogc_fid SET DEFAULT nextval('lga06gen0_05_ogc_fid_seq'::regclass);
+ALTER TABLE ONLY tilez.lga06gen0_05
+   ALTER COLUMN ogc_fid
+   SET DEFAULT nextval('lga06gen0_05_ogc_fid_seq'::regclass);
 
 
---
--- Data for Name: lga06gen0_05; Type: TABLE DATA; Schema: abs_asgc; Owner: luca
---
-
-COPY lga06gen0_05 (ogc_fid, wkb_geometry, state_code, lga_code06, lga_name06) FROM stdin;
+COPY tilez.lga06gen0_05 (ogc_fid, wkb_geometry, state_code, lga_code06, lga_name06) FROM stdin;
 1	0106000020BB100000010000000103000000010000000600000090E1203D1F616240C7A8DA8AB70E42C0DD751F482A5A62402B423DBFA00842C0E819A793FF5E62404FF2CF7EF7F441C027BAA8C211636240B4AB0CBA2F0542C0DB295A0F18636240E8D776DD320542C090E1203D1F616240C7A8DA8AB70E42C0	1	10050	Albury (C)
 2	0106000020BB100000010000000103000000010000001300000005B56B8476096340AC1D831D58EE3EC0687D9287FAFD6240461EB91CCCC13EC0C6B0956009F762403528E1DCBBCB3EC0D47D1CA7CAF8624028D8C672A7AF3EC0F31925EFE9F46240EDB5F4F6D4A63EC04043B62E60EA6240C8C8F4ACED443EC0F27047A7CAF3624008836DEF53473EC0065FAFE88AF36240AD76C65778583EC079809111FCFB6240A9E3D0D904533EC0244C23F6A1FC624028CF332B583B3EC0CBCB09F639046340C2FB3DC079483EC02A2D68C9FF086340AE7D6E591F753EC0B0367AC0320C6340514D28C8F85C3EC0A5C100D1B20D634050E4F3D13C6B3EC0F1D449D4100D63403AC326951D7D3EC001DE9FDECE0C634040C632B63D803EC0DF8963A1F909634039E8331CA6993EC0CD9391D1060C634087D8CB7C68BD3EC005B56B8476096340AC1D831D58EE3EC0	1	10110	Armidale Dumaresq (A)
 3	0106000020BB10000001000000010300000001000000080000003E59315C1DE46240B9D44DD1CDF340C0B28973A498E36240B71B426A7AF240C076B04C5FD2E362408CCF4B627CEF40C0B863A5DA8BE46240CA565AF069EF40C0A7DA620FD1E462400A809B0CA1EF40C009915056B3E46240FB2AC6E778F040C0C497DA69A3E46240B00833AAE2F140C03E59315C1DE46240B9D44DD1CDF340C0	1	10150	Ashfield (A)
@@ -735,33 +713,13 @@ COPY lga06gen0_05 (ogc_fid, wkb_geometry, state_code, lga_code06, lga_name06) FR
 \.
 
 
---
--- Name: lga06gen0_05_ogc_fid_seq; Type: SEQUENCE SET; Schema: abs_asgc; Owner: luca
---
-
-SELECT pg_catalog.setval('lga06gen0_05_ogc_fid_seq', 668, true);
+SELECT pg_catalog.setval('tilez.lga06gen0_05_ogc_fid_seq', 668, true);
 
 
---
--- Name: lga06gen0_05_pkey; Type: CONSTRAINT; Schema: abs_asgc; Owner: luca; Tablespace: 
---
-
-ALTER TABLE ONLY lga06gen0_05
+ALTER TABLE ONLY tilez.lga06gen0_05
     ADD CONSTRAINT lga06gen0_05_pkey PRIMARY KEY (ogc_fid);
 
 
---
--- Name: lga06gen0_05_geom_idx; Type: INDEX; Schema: abs_asgc; Owner: luca; Tablespace: 
---
+CREATE INDEX lga06gen0_05_geom_idx ON tilez.lga06gen0_05 USING gist (wkb_geometry);
 
-CREATE INDEX lga06gen0_05_geom_idx ON lga06gen0_05 USING gist (wkb_geometry);
-
-
---
--- Name: lga06gen0_05; Type: ACL; Schema: abs_asgc; Owner: luca
---
-
---
--- PostgreSQL database dump complete
---
 
