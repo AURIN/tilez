@@ -36,7 +36,7 @@
     <istanbulVersion>0.1.37</istanbulVersion>
     <mochaistVersion>0.2.0</mochaistVersion>
     <topojsonVersion>1.6.0</topojsonVersion>
-    <nodejscommonsVersion>git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.4.10</nodejscommonsVersion>
+    <nodejscommonsVersion>git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.5.1</nodejscommonsVersion>
     <expressVersion>2.5.x</expressVersion>
     <sandboxedVersion>0.2.0</sandboxedVersion>
     <swaggerVersion>2.1.0</swaggerVersion>

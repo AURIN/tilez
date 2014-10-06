@@ -176,7 +176,7 @@ exports.startServer = function(commons, callback) {
     },
     "action" : function(req, res) {
 
-      commons.logRequest(req);
+      commons.logRequest(req, res);
 
       // Checks format requested (extension)
       try {
@@ -284,7 +284,7 @@ exports.startServer = function(commons, callback) {
       "nickname" : "getLayers"
     },
     "action" : function(req, res) {
-      commons.logRequest(req);
+      commons.logRequest(req, res);
 
       tilez.cacheDb.view_with_list("tilez", "tilesize", "layers", {
         group_level : 4
@@ -328,7 +328,7 @@ exports.startServer = function(commons, callback) {
     },
     "action" : function(req, res) {
 
-      commons.logRequest(req);
+      commons.logRequest(req, res);
 
       // Checks format requested (extension)
       try {
@@ -464,7 +464,7 @@ exports.startServer = function(commons, callback) {
       "nickname" : "clearCache"
     },
     "action" : function(req, res) {
-      commons.logRequest(req);
+      commons.logRequest(req, res);
 
       // Collects information about given layer's tile
       tilez.cacheDb.view("tilez", "tilesize", {

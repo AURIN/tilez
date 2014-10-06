@@ -15,7 +15,7 @@
   }],
   "main": "./app.js",
   "dependencies": {
-    "nodejs-commons": "git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.4.10",
+    "nodejs-commons": "git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.5.1",
     "express": "2.5.x",
     "util": "0.4.9",
     "swagger-node-express": "2.1.0",
