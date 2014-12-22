@@ -62,7 +62,7 @@ These data were then generalized to minimize their size using PostgreSQL and Pos
 
 * `npm install`
 
-### Adapt the properties file `vector-tile-server-combined.properties`
+### Adapt the properties file `tilez-combined.properties`
 
 * Change hosts, passwords, servers' addresses and ports to reflect your settngs
  
@@ -202,7 +202,7 @@ After the properties file is made, the following -and quicker- command can be us
 
 NOTE: By default the test database is dropped at the end of tests.
 NOTE: During testing the following error may appear: 
-"Error: Cannot find module '/vector-tile-server/[object Object]'". 
+"Error: Cannot find module '/tilez/[object Object]'". 
 This message is harmless, and does not influence the tests.
 
 
@@ -221,7 +221,7 @@ This message is harmless, and does not influence the tests.
 1.  Stop the service:
   `sudo service aurin-api-tilez stop`
 1.  Rename the old version's directory (if existing) on the target system to datastore.old 
-1.  Move the `vector-tile-server` directory (under node_modules) to the relevant position on the target system  
+1.  Move the `tilez` directory (under node_modules) to the relevant position on the target system  
 (usually `/opt`).
 1.  Start the service:
   `sudo service aurin-api-Tilez start`
@@ -233,7 +233,7 @@ To test the integration between the client and the server, you may use clients
 built with Leaflet.
 
 To test, just load the index.html page in your browser:
-  `file:///+path_to_tilez_/vector-tile-server/client/leaflet/index.html`
+  `file:///+path_to_tilez_/tilez/client/leaflet/index.html`
 ...and start zooming and panning around (click and mouse hover events supported as well).
 
 

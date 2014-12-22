@@ -171,7 +171,8 @@ TopoJsonRenderer.prototype.render = function() {
   var topology = (topojson.topology({
     collection : this.frame
   }, {
-    quantization : this.quantization,
+    "pre-quantization" : this.quantization,
+    "post-quantization" : this.quantization,
     "property-transform" : function(properties, key, value) {
       properties[key] = value;
       return true;

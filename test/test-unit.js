@@ -32,6 +32,20 @@ var nano = null;
 var pg = null;
 var renderers = require("../src/renderers.js");
 
+
+var tiles_within = function (actual, expected) {
+    var min_e = expected[0];
+    var max_e = expected[1];
+    var min_a = actual[0];
+    var max_a = actual[1];
+    expect(min_e[0]).eql(min_a[0]);
+    expect(min_e[1]).gte(min_a[1]-1);
+    expect(min_e[2]).gte(min_a[2]-1);
+    expect(max_e[0]).eql(max_a[0]);
+    expect(max_e[1]).lte(max_a[1]+1);
+    expect(max_e[2]).lte(max_a[2]+1);
+};
+
 describe(
     "test-unit.js",
     function() {
@@ -113,36 +127,36 @@ describe(
 
       it("converts bbox to tiles #1", function(done) {
         var t = testData.transform[0];
-        expect(tilezCommons.bbox2tile(t.tileMin[0], t.bbox)).eql(
-            [ t.tileMin, t.tileMax ]);
+        tiles_within([ t.tileMin, t.tileMax ],
+            tilezCommons.bbox2tile(t.tileMin[0], t.bbox));
         done();
       });
 
       it("converts bbox to tiles #2", function(done) {
         var t = testData.transform[1];
-        expect(tilezCommons.bbox2tile(t.tileMin[0], t.bbox)).eql(
-            [ t.tileMin2, t.tileMax2 ]);
+        tiles_within([ t.tileMin, t.tileMax ],
+            tilezCommons.bbox2tile(t.tileMin[0], t.bbox));
         done();
       });
 
       it("converts bbox to tiles #3", function(done) {
         var t = testData.transform[2];
-        expect(tilezCommons.bbox2tile(t.tileMin[0], t.bbox)).eql(
-            [ t.tileMin2, t.tileMax2 ]);
+        tiles_within([ t.tileMin, t.tileMax ],
+            tilezCommons.bbox2tile(t.tileMin[0], t.bbox));
         done();
       });
 
       it("converts bbox to tiles #4", function(done) {
         var t = testData.transform[3];
-        expect(tilezCommons.bbox2tile(t.tileMin[0], t.bbox)).eql(
-            [ t.tileMin2, t.tileMax2 ]);
+        tiles_within([ t.tileMin, t.tileMax ],
+            tilezCommons.bbox2tile(t.tileMin[0], t.bbox));
         done();
       });
 
       it("converts bbox to tiles #5", function(done) {
         var t = testData.transform[4];
-        expect(tilezCommons.bbox2tile(t.tileMin[0], t.bbox)).eql(
-            [ t.tileMin2, t.tileMax2 ]);
+        tiles_within([ t.tileMin, t.tileMax ],
+            tilezCommons.bbox2tile(t.tileMin[0], t.bbox));
         done();
       });
 

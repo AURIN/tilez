@@ -375,10 +375,10 @@ commons.getQueryEntry = function(layer, zoom, config) {
  * @return an Array with minx, miny, maxx, maxy, in EPSG:4326
  */
 commons.tile2bbox = function(z, x, y) {
-  return [ commons.tile2long(Number(x), Number(z)),
-      commons.tile2lat(Number(y) + 1, Number(z)),
-      commons.tile2long(Number(x) + 1, Number(z)),
-      commons.tile2lat(Number(y), Number(z)) ];
+  return [ commons.tile2long_down(Number(x), Number(z)),
+      commons.tile2lat_up(Number(y) + 1, Number(z)),
+      commons.tile2long_up(Number(x) + 1, Number(z)),
+      commons.tile2lat_down(Number(y), Number(z)) ];
 };
 
 /**
@@ -393,10 +393,10 @@ commons.tile2bbox = function(z, x, y) {
  */
 commons.bbox2tile = function(z, bbox) {
   return [
-      [ Number(z), commons.long2tile(bbox[0], Number(z)),
-          commons.lat2tile(bbox[1], Number(z)) ],
-      [ Number(z), commons.long2tile(bbox[2], Number(z)),
-          commons.lat2tile(bbox[3], Number(z)) ] ];
+      [ Number(z), commons.long2tile_up(bbox[0], Number(z)),
+          commons.lat2tile_down(bbox[1], Number(z)) ],
+      [ Number(z), commons.long2tile_down(bbox[2], Number(z)),
+          commons.lat2tile_up(bbox[3], Number(z)) ] ];
 };
 
 /**
@@ -462,12 +462,31 @@ commons.tile2docid = function(args) {
  * http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Tile_bounding_box
  * The lat and lon are supposed to be in EPSG:4326
  */
-commons.long2tile = function(lon, zoom) {
-  return (Math.floor((lon + 180) / 360 * Math.pow(2, zoom)));
+
+/* The machine epsilon is a number just big enough such that
+ * 1 + machine_epsilon != 1 and 1 - machine_epsilon != 1.
+ */
+var machine_epsilon = 1.19209E-07;
+
+commons.long2tile_up = function(lon, zoom) {
+  return (Math.floor((lon + 180) / 360 * Math.pow(2, zoom) * (1 + machine_epsilon)));
 };
 
-commons.lat2tile = function(lat, zoom) {
-  return (Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1
+commons.long2tile_down = function(lon, zoom) {
+  return (Math.floor((lon + 180) / 360 * Math.pow(2, zoom) * (1 - machine_epsilon)));
+};
+
+commons.lat2tile_up = function(lat, zoom) {
+  return (Math.floor((1 + machine_epsilon)
+      * (1 - Math.log(Math.tan(lat * Math.PI / 180) + 1
+      / Math.cos(lat * Math.PI / 180))
+      / Math.PI)
+      / 2 * Math.pow(2, zoom)));
+};
+
+commons.lat2tile_down = function(lat, zoom) {
+  return (Math.floor((1 - machine_epsilon)
+      * (1 - Math.log(Math.tan(lat * Math.PI / 180) + 1
       / Math.cos(lat * Math.PI / 180))
       / Math.PI)
       / 2 * Math.pow(2, zoom)));
@@ -477,7 +496,24 @@ commons.tile2long = function(x, z) {
   return (x / Math.pow(2, z) * 360 - 180);
 };
 
+commons.tile2long_down = function(x, z) {
+  return commons.tile2long(x,z) * (1 - machine_epsilon);
+};
+
+commons.tile2long_up = function(x, z) {
+  return commons.tile2long(x,z) * (1 + machine_epsilon);
+};
+
 commons.tile2lat = function(y, z) {
   var n = Math.PI - 2 * Math.PI * y / Math.pow(2, z);
   return (180 / Math.PI * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))));
 };
+
+commons.tile2lat_down = function(y, z) {
+  return commons.tile2lat(y,z) * (1 - machine_epsilon);
+};
+
+commons.tile2lat_up = function(y, z) {
+  return commons.tile2lat(y,z) * (1 + machine_epsilon);
+};
+
