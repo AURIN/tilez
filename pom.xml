@@ -24,19 +24,19 @@
     <sequenceVersion>2.2.1</sequenceVersion>
     <utilVersion>0.4.9</utilVersion>
     <pgVersion>2.2.0</pgVersion>
-    <pgMockVersion>git+ssh://git@github.com:AURIN/pg-mock.git#v0.2.4</pgMockVersion>
-    <nanoVersion>git+ssh://git@github.com:AURIN/nano.git#v5.10.1-AURIN</nanoVersion>
-    <nanomockVersion>git+ssh://git@github.com:AURIN/nano-mock.git#v0.1.6</nanomockVersion>
+    <pgMockVersion>AURIN/pg-mock.git#v0.2.4</pgMockVersion>
+    <nanoVersion>AURIN/nano.git#v5.10.1-AURIN</nanoVersion>
+    <nanomockVersion>AURIN/nano-mock.git#v0.1.6</nanomockVersion>
     <clarinetVersion>0.7.2</clarinetVersion>
     <saxVersion>0.5.1</saxVersion>
     <chaiVersion>1.5.0</chaiVersion>
     <mochaVersion>1.5.0</mochaVersion>
-    <mochaVersion>git+ssh://git@github.com:AURIN/mocha.git</mochaVersion>
+    <mochaVersion>AURIN/mocha.git</mochaVersion>
     <xunitfileVersion>0.0.5</xunitfileVersion>
     <istanbulVersion>0.1.37</istanbulVersion>
     <mochaistVersion>0.2.0</mochaistVersion>
     <topojsonVersion>1.6.0</topojsonVersion>
-    <nodejscommonsVersion>git+ssh://git@github.com:AURIN/nodejs-commons.git#v0.5.1</nodejscommonsVersion>
+    <nodejscommonsVersion>AURIN/nodejs-commons.git#v0.5.1</nodejscommonsVersion>
     <expressVersion>2.5.x</expressVersion>
     <sandboxedVersion>0.2.0</sandboxedVersion>
     <swaggerVersion>2.1.0</swaggerVersion>
@@ -58,7 +58,7 @@
   <parent>
     <groupId>au.org.aurin</groupId>
     <artifactId>aurin-project</artifactId>
-    <version>0.2.6</version>
+    <version>0.5.0.A-SNAPSHOT</version>
   </parent>
 
   <prerequisites>
